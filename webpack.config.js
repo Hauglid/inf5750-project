@@ -1,9 +1,9 @@
 module.exports = {
     // The entry file of our app, where the app should start.
-    entry: './src/app.js',
+    entry: './src/index.js',
     output: {
         // The filename of the bundle. This file will contain all our code from all the separate files bundled into one .js file.
-        filename: 'app.js'
+        filename: 'index.js'
     },
 
     module: {

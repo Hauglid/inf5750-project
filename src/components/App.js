@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { saveOrganisationUnit, loadOrganisationUnits, deleteOrganisationUnit } from '../api';
 import List from './List';
 import Form from './Form';
+import Map from './Map';
 
-/**
- * ES2015 class component
- * https://facebook.github.io/react/docs/reusable-components.html#es6-classes-and-react.createclass
- */
 export default class App extends Component {
+    /*
     constructor(props, context) {
         super(props, context);
 
@@ -22,7 +20,6 @@ export default class App extends Component {
         this.onItemClick = this.onItemClick.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
-
     componentDidMount() {
         this.loadOrganisationUnits();
     }
@@ -63,8 +60,9 @@ export default class App extends Component {
             .catch(() => alert(`Could save organisation unit ${item.displayName}`))
             .then(() => this.setState({ isSaving: false })); // After either success or failure set the isSaving state to false
     }
-
+    */
     render() {
+        /*
         // If the component state is set to isLoading we hide the app and show a loading message
         if (this.state.isLoading) {
             return (
@@ -74,14 +72,21 @@ export default class App extends Component {
 
         // Render the app which includes the list component and the form component
         // We hide the form component when we are in the saving state.
+        
         return (
+
+            
             <div className="app">
                 <List
                     onItemClick={this.onItemClick}
                     items={this.state.items}
                 />
-                {this.state.isSaving ? <div>Saving organisation unit</div> : <Form onSubmit={this.onSubmit} />}
+                //{this.state.isSaving ? <div>Saving organisation unit</div> : <Form onSubmit={this.onSubmit} />}
             </div>
+        );
+        */
+        return(
+            <Map />
         );
     }
 }
