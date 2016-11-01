@@ -8,8 +8,8 @@ export default class App extends Component {
     render() {
         return(
             <div>
-                <Map />
                 <Search/>
+                <Map />
             </div>
 
         );

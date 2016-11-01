@@ -6,6 +6,10 @@ import React, { Component } from 'react';
 
 export default class Search extends Component {
     render(){
-        return <h2> karli stuff </h2>
+        return (
+            <form>
+                <input type="text" placeholder="Search..." />
+            </form>
+        );
     }
 }
