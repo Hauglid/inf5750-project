@@ -1,7 +1,7 @@
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Counter from './Counter';
-import Header from "./Header";
+import Counter from './Components/Counter';
+import Header from "./Components/Header";
 
 
 export default class App extends React.Component {
