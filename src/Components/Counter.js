@@ -7,7 +7,7 @@ export default class Counter extends React.Component {
     constructor() {
         super();
         this.state = {
-            count: 0,
+            count: 1,
         };
         this.increaseCounter = this.increaseCounter.bind(this);
     }
@@ -23,8 +23,8 @@ export default class Counter extends React.Component {
 
                 <RaisedButton secondary="true" labelPosition="before" label="secondary"/>
 
-                <RaisedButton  labelPosition="before" label={this.state.count} onClick={this.increaseCounter} >
-                </RaisedButton>
+                <RaisedButton  labelPosition="before" label={this.state.count} onClick={this.increaseCounter} />
+
             </div>
         );
     }
