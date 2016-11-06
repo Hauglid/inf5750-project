@@ -5,7 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Counter from './Components/Counter';
 import Header from "./Components/Header";
-
+import Body from "./Components/Body"
 
 export default class App extends React.Component {
     render() {
@@ -14,7 +14,7 @@ export default class App extends React.Component {
                 <div >
                     <Header/>
                     <Counter/>
-
+                    <Body/>
                 </div>
 
             </MuiThemeProvider>
