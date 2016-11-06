@@ -1,25 +1,25 @@
 import React from 'react';
-/**
- * A counter button: tap the button to increase the count.
- */
-export class Map extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-        };
-    }
+import {GoogleMapLoader, GoogleMap, Marker} from "react-google-maps"
+
+export default class Map extends React.Component {
 
     render() {
-        if(!this.props.loaded){
-            return <div>Loading...</div>
-        }
+        const mapContainer = <div style={{height: '100%', width: '100%'}}/>
 
         return (
-            <div>Map will go here</div>
+            <GoogleMapLoader
+                containerElement={mapContainer}
+                googleMapElement={
+                    <GoogleMap
+
+                        defaultZoom={15}
+                        defaultCenter={this.props.center}
+                        options={{streetViewControl: false, mapTypeControl: false}}>
+                    </GoogleMap>
+                }/>
+
+
         )
     }
 }
 
-export default GoogleApiComponent({
-    apiKey: __GAPI_KEY__
-})(Map)
