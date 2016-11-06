@@ -1,13 +1,13 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
+import pink500 from "material-ui/styles/colors";
 
 export default class Search extends React.Component {
     render() {
         return (
             <div>
-                <TextField hintText="Enter search query here...">
-
-                </TextField>
+                {/*gives white, must be bug*/}
+                <TextField floatingLabelFocusStyle={{color:pink500}} floatingLabelText="Enter search here" />
             </div>
 
         );
