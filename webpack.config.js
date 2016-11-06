@@ -1,27 +1,41 @@
-module.exports = {
-    // The entry file of our app, where the app should start.
-    entry: './src/index.js',
-    output: {
-        // The filename of the bundle. This file will contain all our code from all the separate files bundled into one .js file.
-        filename: 'index.js'
-    },
+var path = require('path');
+var webpack = require("webpack");
 
+var config = {
+    context: path.join(__dirname, 'src'),
+    entry: [
+        'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+
+        './main.js',
+    ],
+    output: {
+        path: path.join(__dirname, 'www'),
+        filename: 'bundle.js',
+    },
     module: {
         loaders: [
             {
-                test: /.*\.js$/,
+                test: /\.js$/,
                 exclude: /node_modules/,
-                loader: 'babel',
-            }
-        ]
+                loaders: ['react-hot', 'babel'],
+            },
+        ],
+    },
+    resolveLoader: {
+        root: [
+            path.join(__dirname, 'node_modules'),
+        ],
+    },
+    resolve: {
+        root: [
+            path.join(__dirname, 'node_modules'),
+        ],
     },
 
-    // Settings for webpack-dev-server
-    devServer: {
-        // Run the dev server on port 8081
-        port: 8081,
-        // Serve the files from the src directory. So http://localhost:8081 will load index.html from the ./src directory.
-        contentBase: './src',
-        inline: true,
-    }
+    plugins: [
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin()
+    ],
 };
+module.exports = config;
