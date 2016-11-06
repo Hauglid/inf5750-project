@@ -1,5 +1,5 @@
 import React from 'react';
-import Map from "./Map"
+import Map from "./MapComponent"
 
 export default class Body extends React.Component {
     constructor() {
@@ -9,7 +9,7 @@ export default class Body extends React.Component {
     render() {
         return (
             <div>
-                <Map/>
+                <MapComponent/>
             </div>
 
         )

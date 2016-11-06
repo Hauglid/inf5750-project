@@ -2,7 +2,7 @@ import React from 'react';
 /**
  * A counter button: tap the button to increase the count.
  */
-export default class Map extends React.Component {
+export default class MapComponent extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -12,7 +12,6 @@ export default class Map extends React.Component {
     render() {
         return (
             <div>
-
             </div>
         );
     }
