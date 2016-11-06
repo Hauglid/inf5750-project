@@ -7,7 +7,7 @@ export default class Search extends React.Component {
         return (
             <div>
                 {/*gives white, must be bug*/}
-                <TextField floatingLabelFocusStyle={{color:pink500}} floatingLabelText="Enter search here" />
+                <TextField floatingLabelText="Enter search here" />
             </div>
 
         );
