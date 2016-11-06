@@ -1,15 +1,30 @@
 import React from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import pink500 from "material-ui/styles/colors";
 
-export default class Search extends React.Component {
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+
+export default class ToolbarExamplesSimple extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: 3,
+        };
+    }
+
+
     render() {
         return (
-            <div>
-                {/*gives white, must be bug*/}
-                <TextField floatingLabelText="Enter search here" />
-            </div>
+            <Toolbar>
+                <TextField fullWidth="true" hintText="Enter search query here"/>
 
+                <ToolbarGroup lastChild={true}>
+                    <ToolbarSeparator />
+                    <RaisedButton label="Search" primary={true}/>
+
+                </ToolbarGroup>
+            </Toolbar>
         );
     }
 }

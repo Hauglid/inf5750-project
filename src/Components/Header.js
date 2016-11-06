@@ -13,10 +13,7 @@ export default class Header extends React.Component {
             <div>
 
                 <AppBar
-                    title="Title"
-                    iconClassNameRight="muidocs-icon-navigation-expand-more"
-                    iconElementRight={<Search/>}
-
+                    title="React Web App with material-ui"
                 />
                 <Search/>
 
