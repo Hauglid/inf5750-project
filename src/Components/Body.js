@@ -1,6 +1,6 @@
 import React from 'react';
 import Map from "./Map"
-
+import OrgUnitInfo from "./OrgUnitInfo"
 export default class Body extends React.Component {
 
 
@@ -28,6 +28,8 @@ export default class Body extends React.Component {
         return (
             <div style={{width:600, height:300}}>
                 <Map center={location} markers={markers}/>
+                <OrgUnitInfo />
+
             </div>
 
         )
