@@ -63,7 +63,7 @@ export default class ToolbarExamplesSimple extends React.Component {
                 />
                 <ToolbarGroup lastChild={true}>
                     <ToolbarSeparator />
-                    <RaisedButton label="Search" primary={true} on/>
+                    <RaisedButton label="Search" primary={true}/>
 
                 </ToolbarGroup>
             </Toolbar>

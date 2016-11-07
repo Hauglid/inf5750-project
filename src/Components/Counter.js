@@ -19,9 +19,9 @@ export default class Counter extends React.Component {
     render() {
         return (
             <div>
-                <RaisedButton  primary="true" labelPosition="before" label="primary"/>
+                <RaisedButton  primary={true} labelPosition="before" label="primary"/>
 
-                <RaisedButton secondary="true" labelPosition="before" label="secondary"/>
+                <RaisedButton secondary={true} labelPosition="before" label="secondary"/>
 
                 <RaisedButton  labelPosition="before" label={this.state.count} onClick={this.increaseCounter} />
 
