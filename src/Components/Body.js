@@ -7,8 +7,8 @@ export default class Body extends React.Component {
     render() {
         
         const location = {
-            lat:59.911491,
-            lng:10.757933
+            lat:8.460555,
+            lng:-11.779889
         };
 
         const markers =[
