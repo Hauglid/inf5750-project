@@ -1,6 +1,6 @@
 import React from 'react';
 import Map from "./Map"
-
+import OrgUnitInfo from "./OrgUnitInfo"
 export default class Body extends React.Component {
 
 
