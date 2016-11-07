@@ -1,5 +1,6 @@
 import React from 'react';
 import {loadOrganisationUnits, loadUnitInfo} from '../api';
+import ListItems from './ListItems';
 
 export default class OrgUnitInfo extends React.Component {
     constructor() {
@@ -7,7 +8,7 @@ export default class OrgUnitInfo extends React.Component {
 
         this.state = {
             isSaving: false,
-            items: [],
+            isLoading: false,
             unitInfo: [],
         };
     }
@@ -37,7 +38,6 @@ export default class OrgUnitInfo extends React.Component {
         });
     }
 
-
     render() {
 
         return (
@@ -45,13 +45,12 @@ export default class OrgUnitInfo extends React.Component {
                 <h1>OrgUnitInfo</h1>
                 <h3>{this.state.unitInfo["displayName"]}</h3>
                 <ul>
-                    <li>Name: {this.state.unitInfo["displayName"]}</li>
-                    <li>Opening date: {this.state.unitInfo["openingDate"]}</li>
-                    <li>Coordinates: {this.state.unitInfo["coordinates"]}</li>
-                    <li>ID: {this.state.unitInfo["id"]}</li>
+                    <ListItems category="Name" value={this.state.unitInfo["displayName"]} />
+                    <ListItems category="Opening date" value={this.state.unitInfo["openingDate"]} />
+                    <ListItems category="Coordinates" value={this.state.unitInfo["coordinates"]}/>
+                    <ListItems category="ID" value={this.state.unitInfo["id"]}/>
                 </ul>
             </div>
         )
-    };
-
+    }
 }
