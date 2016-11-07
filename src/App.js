@@ -6,7 +6,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Counter from './Components/Counter';
 import Header from "./Components/Header";
 import Body from "./Components/Body"
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
+injectTapEventPlugin();
 export default class App extends React.Component {
     render() {
         return (
