@@ -11,6 +11,7 @@ export default class Body extends React.Component {
             lng:-11.779889
         };
 
+
         const markers =[
             {
                 location:{
@@ -25,6 +26,7 @@ export default class Body extends React.Component {
                 }
             }
         ]
+
         return (
             <div style={{width:600, height:300}}>
                 <Map center={location} markers={markers}/>
