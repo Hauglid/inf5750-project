@@ -3,19 +3,7 @@ import {GoogleMapLoader, GoogleMap, Marker} from "react-google-maps"
 
 export default class Map extends React.Component {
 
-    componentDidMount() {
-        this.shape();
-    }
-    
-    shape(){
-        // Define the LatLng coordinates for the polygon's path.
-        var triangleCoords = [
-            {lat: 25.774, lng: -80.190},
-            {lat: 18.466, lng: -66.118},
-            {lat: 32.321, lng: -64.757},
-            {lat: 25.774, lng: -80.190}
-        ];
-
+        /*
         // Construct the polygon.
         var bermudaTriangle = new google.maps.Polygon({
             paths: triangleCoords,
@@ -25,8 +13,7 @@ export default class Map extends React.Component {
             fillColor: '#FF0000',
             fillOpacity: 0.35
         });
-        bermudaTriangle.setMap(map);
-    }
+        */
 
     render() {
         const mapContainer = <div style={{height: '100%', width: '100%'}}/>
@@ -41,17 +28,30 @@ export default class Map extends React.Component {
             return <Marker key={i} {...marker}/>
         })
 
+        const triangleCoords = [
+            {lat: 25.774, lng: -80.190},
+            {lat: 18.466, lng: -66.118},
+            {lat: 32.321, lng: -64.757},
+            {lat: 25.774, lng: -80.190}
+        ];
+
+
         return (
             <GoogleMapLoader
                 containerElement={mapContainer}
                 googleMapElement={
-                    <GoogleMap 
-
+                    <GoogleMap
                         ref = {map}
                         defaultZoom={7}
                         defaultCenter={this.props.center}
                         options={{streetViewControl: false, mapTypeControl: false}}>
                         {markers}
+
+                        /*
+                        <Polygon
+                            strokeColor = '#FF0000'
+                            path = {triangleCoords} />
+                        */
                     </GoogleMap>
                 }/>
         )
