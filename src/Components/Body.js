@@ -13,10 +13,11 @@ export default class Body extends React.Component {
 
 
         const markers =[
+
             {
                 location:{
-                    lat:59.911491,
-                    lng:10.757933
+                    lat:25.774,
+                    lng:-80.190
                 }
             },
             {
@@ -25,11 +26,19 @@ export default class Body extends React.Component {
                     lng:10.75361
                 }
             }
+
         ]
+
+        const triangleCoords = [
+            {lat: 25.774, lng: -80.190},
+            {lat: 18.466, lng: -66.118},
+            {lat: 32.321, lng: -64.757},
+            {lat: 25.774, lng: -80.190}
+        ];
 
         return (
             <div style={{width:600, height:300}}>
-                <Map center={location} markers={markers}/>
+                <Map center={location} markers={markers} poly={triangleCoords}/>
                 <OrgUnitInfo />
 
             </div>
