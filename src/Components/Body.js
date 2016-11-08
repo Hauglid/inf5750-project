@@ -7,8 +7,8 @@ export default class Body extends React.Component {
     render() {
         
         const location = {
-            lat:25.774,
-            lng:-80.190
+            lat:8.460555,
+            lng:-11.779889
         };
 
 
@@ -16,18 +16,18 @@ export default class Body extends React.Component {
 
             {
                 location:{
-                    lat:25.774,
-                    lng:-80.190
+                    lat:8.460555,
+                    lng:-11.779884
                 }
             },
             {
                 location:{
-                    lat:59.90694,
-                    lng:10.75361
+                    lat:8.361555,
+                    lng:-11.779882
                 }
             }
 
-        ]
+        ];
 
         const triangleCoords = [
             {lat: 25.774, lng: -80.190},

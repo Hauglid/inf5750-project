@@ -5,6 +5,12 @@ export default class Map extends React.Component {
 
 
     render() {
+
+        const location = {
+            lat:8.460555,
+            lng:-11.779889
+        };
+
         const mapContainer = <div style={{height: '100%', width: '100%'}}/>
 
         const markers = this.props.markers.map((venue, i) => {
@@ -23,7 +29,7 @@ export default class Map extends React.Component {
                 googleMapElement={
                     <GoogleMap
 
-                        defaultZoom={15}
+                        defaultZoom={7}
                         defaultCenter={this.props.center}
                         options={{streetViewControl: false, mapTypeControl: false}}>
                         {markers}
