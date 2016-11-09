@@ -11,7 +11,6 @@ export default class Header extends React.Component {
     render() {
         return (
             <div>
-
                 <AppBar
                     title="React Web App with material-ui"
                 />

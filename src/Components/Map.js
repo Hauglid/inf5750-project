@@ -2,7 +2,17 @@ import React from 'react';
 import {GoogleMapLoader, GoogleMap, Marker, Polygon} from "react-google-maps"
 
 export default class Map extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            zoom: 7,
+        };
+        this.handleClick = this.handleClick.bind(this);
+    }
 
+    handleClick(){
+        console.log("HELLOOOOO");
+    }
 
     render() {
 
@@ -28,12 +38,14 @@ export default class Map extends React.Component {
                 containerElement={mapContainer}
                 googleMapElement={
                     <GoogleMap
-
-                        defaultZoom={7}
+                        //onClick= {props.onMapClick}
+                        defaultZoom={this.state.zoom}
                         defaultCenter={this.props.center}
                         options={{streetViewControl: false, mapTypeControl: false}}>
                         {markers}
                         <Polygon
+                            //this does not work
+                            onMapClick = {this.handleClick}
                             strokeColor='#FF0000'
                             path = {this.props.poly}
                             fillColor = '#FF0000'
