@@ -46,3 +46,8 @@ export function loadUnitInfo() {
         .then(onlySuccessResponses)
         .then(response => response.json());
 }
+export function loadUnitInfoLvl2(level) {
+    return fetch(`${serverUrl}/organisationUnits?level=2`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json());
+}
