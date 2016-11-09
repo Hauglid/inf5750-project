@@ -1,11 +1,11 @@
 import React from 'react';
-import {withGoogleMap, GoogleMap, Marker} from "react-google-maps"
+import {withGoogleMap, GoogleMap, Marker, Polygon} from "react-google-maps"
 
 const GettingStartedGoogleMap = withGoogleMap(props => (
     <GoogleMap
         ref={props.onMapLoad}
-        defaultZoom={3}
-        defaultCenter={{ lat: -25.363882, lng: 131.044922 }}
+        defaultZoom={props.zooming}
+        defaultCenter={{ lat: 8.460555, lng:-11.779889 }}
         onClick={props.onMapClick}
     >
         {props.markers.map(marker => (
@@ -14,6 +14,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
                 onRightClick={() => props.onMarkerRightClick(marker)}
             />
         ))}
+
     </GoogleMap>
 ));
 
@@ -29,6 +30,7 @@ export default class Map extends React.Component {
                 key: `Taiwan`,
                 defaultAnimation: 2,
             }],
+            zoom: 7,
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.handleMapClick = this.handleMapClick.bind(this);
@@ -42,22 +44,22 @@ export default class Map extends React.Component {
         }
     }
 
-    /*
-     * This is called when you click on the map.
-     * Go and try click now.
-     */
     handleMapClick(event) {
+
         const nextMarkers = [
             ...this.state.markers,
             {
                 position: event.latLng,
                 defaultAnimation: 2,
-                key: Date.now(), // Add a key property for: http://fb.me/react-warning-keys
+                key: Date.now(),
             },
         ];
         this.setState({
             markers: nextMarkers,
+            zoom: 5,
         });
+
+        console.log("HELLO");
 
         if (nextMarkers.length === 3) {
             this.props.toast(
@@ -93,6 +95,7 @@ export default class Map extends React.Component {
                     onMapClick={this.handleMapClick}
                     markers={this.state.markers}
                     onMarkerRightClick={this.handleMarkerRightClick}
+                    zooming = {this.state.zoom}
                 />
             </div>
         );
