@@ -10,6 +10,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();
 export default class App extends React.Component {
+
     render() {
         return (
             <MuiThemeProvider /*{ muiTheme={getMuiTheme(darkBaseTheme)}}*/>
