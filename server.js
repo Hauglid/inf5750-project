@@ -28,7 +28,7 @@ app.use(webpackHotMiddleware(compiler, {
 
 app.use(express.static(__dirname + '/www'));
 
-var port = 3000;
+var port = 8081;
 var host = "localhost";
 
 var server = app.listen(port, host, function () {
