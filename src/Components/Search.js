@@ -60,6 +60,8 @@ export default class ToolbarExamplesSimple extends React.Component {
                     dataSource={this.state.dataSource}
                     onUpdateInput={this.onUpdateInput}
                     fullWidth={true}
+                    maxSearchResults={5}
+
                 />
                 <ToolbarGroup lastChild={true}>
                     <ToolbarSeparator />
