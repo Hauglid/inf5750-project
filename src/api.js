@@ -54,3 +54,9 @@ export function searchByName(name) {
         .then(response => response.json())
         .then(({organisationUnits}) => organisationUnits);
 }
+
+export function loadUnitInfoLvl(level) {
+    return fetch(`${serverUrl}/organisationUnits?level=${level}`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json());
+}
