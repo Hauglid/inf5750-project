@@ -12,12 +12,14 @@ export default class OrgUnitInfo extends React.Component {
             isLoading: false,
             unitInfo: [],
             editing: false,
+            items: [],
         };
         this.switchToEdit = this.switchToEdit.bind(this);
     }
 
     componentDidMount() {
         this.loadUnitInfo();
+        this.loadInfo();
     }
 
 
@@ -43,7 +45,7 @@ export default class OrgUnitInfo extends React.Component {
 
     switchToEdit() {
         this.setState({editing: true});
-        console.log(searchByName("Kay"));
+        console.log(this.state.items);
     }
 
     render() {
@@ -62,7 +64,7 @@ export default class OrgUnitInfo extends React.Component {
                     <br/>
                     <TextFields underLineShow={this.state.editing} category="ID" value={this.state.unitInfo["id"]} />
                     <br/>
-                    <TextFields hintText="Hint" value=""/>
+                    <TextFields disabledTextColor={{color: 'black'}} style={{color: 'black'}} underLineShow={false} disabled={true} defaultValue="Hint" />
 
 
 

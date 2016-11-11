@@ -9,7 +9,6 @@ export default class TextFields extends React.Component {
     }
 
     render() {
-        console.log(this.props.underLineShow);
         return (
             <TextField
                 floatingLabelText={this.props.category}
@@ -17,6 +16,8 @@ export default class TextFields extends React.Component {
                 value={this.props.value}
                 style={this.props.style}
                 fullWidth={this.props.fullWidth}
+                disabled={this.props.disabled}
+                defaultValue={this.props.defaultValue}
             />
         )
     }
