@@ -40,12 +40,21 @@ export function loadOrganisationUnits() {
         .then(({ organisationUnits }) => organisationUnits);
 }
 
-export function loadUnitInfo() {
+export function loadUnitInfo(unitId) {
     console.log("api.loadUnitInfo");
-    return fetch(`${serverUrl}/organisationUnits/kbGqmM6ZWWV`, fetchOptions)
+    return fetch(`${serverUrl}/organisationUnits/${unitId}`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json());
 }
+
+export function searchByName(name) {
+    console.log("api.searchByName");
+    return fetch(`${serverUrl}/organisationUnits/?paging=false&filter=name:like:${name}`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        .then(({organisationUnits}) => organisationUnits);
+}
+
 export function loadUnitInfoLvl(level) {
     return fetch(`${serverUrl}/organisationUnits?level=${level}`, fetchOptions)
         .then(onlySuccessResponses)

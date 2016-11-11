@@ -1,6 +1,7 @@
 import React from 'react';
-import {loadOrganisationUnits, loadUnitInfo} from '../api';
-import ListItems from './ListItems';
+import {loadOrganisationUnits, loadUnitInfo, searchByName} from '../api';
+import TextFields from './TextFields';
+import RaisedButton from 'material-ui/RaisedButton';
 
 export default class OrgUnitInfo extends React.Component {
     constructor() {
@@ -10,7 +11,9 @@ export default class OrgUnitInfo extends React.Component {
             isSaving: false,
             isLoading: false,
             unitInfo: [],
+            editing: false,
         };
+        this.switchToEdit = this.switchToEdit.bind(this);
     }
 
     componentDidMount() {
@@ -31,25 +34,39 @@ export default class OrgUnitInfo extends React.Component {
     //currently loads the same every time, should tak an id as parameter
     loadUnitInfo() {
         console.log("Loading unit info...");
-        loadUnitInfo().then((organisationUnit) => {
+        loadUnitInfo("eoYV2p74eVz").then((organisationUnit) => {
             this.setState({
                 unitInfo: organisationUnit,
             });
         });
     }
 
+    switchToEdit() {
+        this.setState({editing: true});
+        console.log(searchByName("Kay"));
+    }
+
     render() {
 
         return (
             <div>
-                <h1>OrgUnitInfo</h1>
-                <h3>{this.state.unitInfo["displayName"]}</h3>
-                <ul>
-                    <ListItems category="Name" value={this.state.unitInfo["displayName"]} />
-                    <ListItems category="Opening date" value={this.state.unitInfo["openingDate"]} />
-                    <ListItems category="Coordinates" value={this.state.unitInfo["coordinates"]}/>
-                    <ListItems category="ID" value={this.state.unitInfo["id"]}/>
-                </ul>
+                <TextFields fullWidth={true} style={{fontSize: '20px', fontWeight: 'bold'}} value="Organisational Unit Information"/>
+                <RaisedButton label="Edit" primary={true} onClick={this.switchToEdit}/>
+                <br/>
+                <div>
+                    <TextFields underLineShow={this.state.editing} category="Name" value={this.state.unitInfo["displayName"]} />
+                    <br/>
+                    <TextFields underLineShow={this.state.editing} category="Opening date" value={this.state.unitInfo["openingDate"]} />
+                    <br/>
+                    <TextFields underLineShow={this.state.editing} category="Coordinates" value={this.state.unitInfo["coordinates"]} />
+                    <br/>
+                    <TextFields underLineShow={this.state.editing} category="ID" value={this.state.unitInfo["id"]} />
+                    <br/>
+                    <TextFields hintText="Hint" value=""/>
+
+
+
+                </div>
             </div>
         )
     }
