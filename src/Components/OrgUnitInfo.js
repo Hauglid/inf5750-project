@@ -1,5 +1,5 @@
 import React from 'react';
-import {loadOrganisationUnits, loadUnitInfo} from '../api';
+import {loadOrganisationUnits, loadUnitInfo, searchByName} from '../api';
 import TextFields from './TextFields';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -43,6 +43,7 @@ export default class OrgUnitInfo extends React.Component {
 
     switchToEdit() {
         this.setState({editing: true});
+        console.log(searchByName("Kay"));
     }
 
     render() {
@@ -61,6 +62,7 @@ export default class OrgUnitInfo extends React.Component {
                     <br/>
                     <TextFields underLineShow={this.state.editing} category="ID" value={this.state.unitInfo["id"]} />
                     <br/>
+                    <TextFields hintText="Hint" value=""/>
 
 
 
