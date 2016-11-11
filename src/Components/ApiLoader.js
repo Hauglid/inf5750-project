@@ -10,17 +10,18 @@ var loaded = false;
 export function loadLvlOne(){
 
     return new Promise(function (resolve, reject) {
-        console.log("called loading");
-
         if (loaded == false) {
             loadUnitInfoLvl(1).then((metadata => {
                 var arr = metadata["organisationUnits"];
                 lvlOne.id = arr[0]["id"];
                 lvlOne.name = arr[0]["displayName"];
-                console.log("here");
+                console.log("loaded from API");
                 loaded = true;
                 resolve(lvlOne);
             }));
+        }else{
+            console.log("loaded from memory");
+            resolve(lvlOne);
         }
     //potential error message
     //reject(Error("shit..."));

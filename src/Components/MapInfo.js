@@ -24,13 +24,16 @@ export default class MapInfo extends React.Component {
 
     lvlOne(){
         loadLvlOne().then((lvlOne) => {
-        const newUnit = [
-            ...this.state.unitInfo,
-            {name: lvlOne.name },
-        ];
+            const newUnit = [
+                ...this.state.unitInfo,
+                {name: lvlOne.name },
+            ];
             this.setState({
                 unitInfo: newUnit,
             });
+            loadLvlOne().then((lvlOne => {
+                console.log(lvlOne.name);
+            }))
         });
     }
 
