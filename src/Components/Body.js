@@ -1,9 +1,10 @@
 import React from 'react';
 import Map from "./Map"
 import OrgUnitInfo from "./OrgUnitInfo"
+import MapInfo from "./MapInfo"
+
+
 export default class Body extends React.Component {
-
-
     render() {
         
         const location = {
@@ -36,11 +37,12 @@ export default class Body extends React.Component {
             {lat: 25.774, lng: -80.190}
         ];
 
+
         return (
             <div style={{width:600, height:300}}>
                 <Map center={location} markers={markers} poly={triangleCoords}/>
                 <OrgUnitInfo />
-
+                <MapInfo/>
             </div>
 
         )
