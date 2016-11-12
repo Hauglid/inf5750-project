@@ -48,7 +48,7 @@ export function loadUnitInfo(unitId) {
 }
 
 export function searchBy(filter, value) {
-    console.log("api.searchByName");
+    console.log("api.searchBy");
     return fetch(`${serverUrl}/organisationUnits/?paging=false&filter=${filter}:^ilike:${value}`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())

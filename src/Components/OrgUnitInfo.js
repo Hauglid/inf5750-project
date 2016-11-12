@@ -1,5 +1,5 @@
 import React from 'react';
-import {loadOrganisationUnits, loadUnitInfo, searchByName} from '../api';
+import {loadOrganisationUnits, loadUnitInfo, searchBy} from '../api';
 import TextFields from './TextFields';
 import RaisedButton from 'material-ui/RaisedButton';
 
