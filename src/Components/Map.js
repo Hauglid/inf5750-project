@@ -15,6 +15,13 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
             />
         ))}
 
+        /*
+        {props.poly.map(polygon => (
+            <Polygon
+                {...polygon}
+            />
+        ))}
+        */
     </GoogleMap>
 ));
 
@@ -30,11 +37,13 @@ export default class Map extends React.Component {
                 key: `Taiwan`,
                 defaultAnimation: 2,
             }],
+            //polygon: [],
             zoom: 7,
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.handleMapClick = this.handleMapClick.bind(this);
         this.handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
+        this.poly = this.poly.bind(this);
     }
 
     handleMapLoad(map) {
@@ -59,26 +68,22 @@ export default class Map extends React.Component {
             zoom: 5,
         });
 
-        console.log("HELLO");
 
         if (nextMarkers.length === 3) {
             this.props.toast(
-                `Right click on the marker to remove it`,
-                `Also check the code!`
             );
         }
     }
 
     handleMarkerRightClick(targetMarker) {
-        /*
-         * All you modify is data, and the view is driven by data.
-         * This is so called data-driven-development. (And yes, it's now in
-         * web front end and even with google maps API.)
-         */
         const nextMarkers = this.state.markers.filter(marker => marker !== targetMarker);
         this.setState({
             markers: nextMarkers,
         });
+    }
+
+    poly(){
+
     }
 
     render() {

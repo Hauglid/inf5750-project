@@ -42,7 +42,6 @@ export default class Body extends React.Component {
             <div style={{width:600, height:300}}>
                 <Map center={location} markers={markers} poly={triangleCoords}/>
                 <OrgUnitInfo />
-                <MapInfo/>
             </div>
 
         )

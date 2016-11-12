@@ -1,6 +1,4 @@
 import React from 'react';
-import {loadUnitInfoLvl} from '../api';
-import {loadLvlOne, loaded} from './ApiLoader';
 
 export default class MapInfo extends React.Component {
 
@@ -11,14 +9,17 @@ export default class MapInfo extends React.Component {
             loaded: false,
 
             unitInfo: [{
-                name: "vag",
+                name: "name",
+                id: "id",
             }]
         };
         this.lvlOne = this.lvlOne.bind(this);
+        this.lvlTwo = this.lvlTwo.bind(this);
     }
 
     componentDidMount() {
-        this.lvlOne();
+        //this.lvlOne();
+        this.lvlTwo();
     }
 
 
@@ -35,6 +36,15 @@ export default class MapInfo extends React.Component {
                 console.log(lvlOne.name);
             }))
         });
+    }
+
+    lvlTwo(){
+        loadLvlTwo().then(function(response){
+          console.log(response[3].name);
+            loadLvlTwo().then(function(response){
+                console.log(response[3].id);
+            });
+        })
     }
 
     render(){

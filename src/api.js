@@ -56,7 +56,13 @@ export function searchByName(name) {
 }
 
 export function loadUnitInfoLvl(level) {
-    return fetch(`${serverUrl}/organisationUnits?level=${level}`, fetchOptions)
+    return fetch(`${serverUrl}/organisationUnits?level=${level}&paging=false`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json());
+}
+//example of fields: fields=id,name,level
+export function loadUnitInfoLvlAndfields(level, fields){
+    return fetch(`${serverUrl}/organisationUnits?level=${level}&paging=false&fields=${fields}`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json());
 }
