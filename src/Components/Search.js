@@ -2,11 +2,7 @@ import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import AutoComplete from 'material-ui/AutoComplete';
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
-import JSONP from 'jsonp';
-
-const googleAutoSuggestURL = `
-  //suggestqueries.google.com/complete/search?client=youtube&ds=yt&q=`;
-
+import {searchBy} from '../api';
 
 export default class ToolbarExamplesSimple extends React.Component {
 
@@ -15,7 +11,9 @@ export default class ToolbarExamplesSimple extends React.Component {
         this.onUpdateInput = this.onUpdateInput.bind(this);
         this.state = {
             dataSource: [],
-            inputValue: ''
+            inputValue: '',
+            inputId: ''
+
         }
     }
 
@@ -29,28 +27,24 @@ export default class ToolbarExamplesSimple extends React.Component {
     }
 
     performSearch() {
-        const
-            self = this,
-            url = googleAutoSuggestURL + this.state.inputValue;
+        const self = this;
 
         if (this.state.inputValue !== '') {
-            JSONP(url, function (error, data) {
-                let searchResults, retrievedSearchTerms;
+            var response = searchBy("name", self.state.inputValue);
+            response.then((organisationUnit) => {
+                if(organisationUnit.length > 0){
+                    var result = organisationUnit.map(function (a) {return a.displayName});
+                    self.setState({
+                        dataSource: result,
+                        inputId: organisationUnit[0].id
+                    });
 
-                if (error) return error;
+                }
 
-                searchResults = data[1];
-
-                retrievedSearchTerms = searchResults.map(function (result) {
-                    return result[0];
-                });
-
-                self.setState({
-                    dataSource: retrievedSearchTerms
-                });
-            });
+            })
         }
     }
+
 
     render() {
         return (
@@ -59,8 +53,9 @@ export default class ToolbarExamplesSimple extends React.Component {
                     hintText="Search"
                     dataSource={this.state.dataSource}
                     onUpdateInput={this.onUpdateInput}
+                    filter={AutoComplete.caseInsensitiveFilter}
                     fullWidth={true}
-                    maxSearchResults={5}
+                    maxSearchResults={10}
 
                 />
                 <ToolbarGroup lastChild={true}>
