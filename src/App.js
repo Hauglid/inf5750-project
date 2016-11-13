@@ -2,7 +2,7 @@ import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {cyan500} from 'material-ui/styles/colors';
+import {darkBlack} from 'material-ui/styles/colors';
 
 import Counter from './Components/Counter';
 import Header from "./Components/Header";
@@ -13,7 +13,7 @@ injectTapEventPlugin();
 
 const muiTheme = getMuiTheme({
     palette: {
-        disabledColor: cyan500,
+        disabledColor: darkBlack,
     },
 });
 
