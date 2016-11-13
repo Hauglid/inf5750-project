@@ -21,10 +21,10 @@ export default class Search extends React.Component {
     }
 
     onUpdateInput(inputValue) {
-        console.log("onUpdateInput");
         const self = this;
+
         this.setState({
-            inputValue: inputValue
+            inputValue: inputValue.trim()
         }, function () {
             self.performSearch();
         });
@@ -32,7 +32,6 @@ export default class Search extends React.Component {
 
     performSearch() {
         const self = this;
-        console.log("updated to: " + self.state.inputValue);
 
         if (this.state.inputValue !== '') {
             var response = searchBy("name", self.state.inputValue);
