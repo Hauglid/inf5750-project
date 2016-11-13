@@ -40,6 +40,15 @@ export function loadOrganisationUnits() {
         .then(({ organisationUnits }) => organisationUnits);
 }
 
+export function loadAllUnits(){
+    console.log("api.loadAllUnits");
+    return fetch(`${serverUrl}/organisationUnits`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        .then(({organisationUnits}) => organisationUnits);
+
+}
+
 export function loadUnitInfo(unitId) {
     console.log("api.loadUnitInfo");
     return fetch(`${serverUrl}/organisationUnits/${unitId}`, fetchOptions)
