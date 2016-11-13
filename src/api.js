@@ -41,14 +41,12 @@ export function loadOrganisationUnits() {
 }
 
 export function loadUnitInfo(unitId) {
-    console.log("api.loadUnitInfo");
     return fetch(`${serverUrl}/organisationUnits/${unitId}`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json());
 }
 
 export function searchByName(name) {
-    console.log("api.searchByName");
     return fetch(`${serverUrl}/organisationUnits/?paging=false&filter=name:like:${name}`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
