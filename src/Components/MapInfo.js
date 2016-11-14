@@ -1,6 +1,5 @@
-import React, {PropTypes}  from 'react';
+import React from 'react';
 import {loadAllUnits} from '../api';
-import {loadLvlOne, loaded} from './ApiLoader';
 import {List, ListItem} from 'material-ui/List';
 
 export default class MapInfo extends React.Component {
@@ -9,12 +8,7 @@ export default class MapInfo extends React.Component {
         super();
 
         this.state = {
-            loaded: false,
-
-            unitInfo: [{
-                name: "vag",
-                id: 0,
-            }]
+            unitInfo: []
         };
         this.load = this.load.bind(this);
     }
