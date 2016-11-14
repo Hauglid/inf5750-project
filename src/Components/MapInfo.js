@@ -1,5 +1,5 @@
 import React from 'react';
-import {loadUnitInfoLvl} from '../api';
+import {searchBy} from '../api';
 import {List, ListItem} from 'material-ui/List';
 
 export default class MapInfo extends React.Component {
@@ -9,7 +9,7 @@ export default class MapInfo extends React.Component {
 
         this.state = {
             unitInfo: [],
-            level: 2,
+            id: props.id,
         };
         this.load = this.load.bind(this);
     }
@@ -18,10 +18,10 @@ export default class MapInfo extends React.Component {
         this.load();
     }
     componentWillReceiveProps(nextProps){
-        console.log("calling dr. strange love "+nextProps.level);
-        if(nextProps.level != this.state.level){
+        console.log("calling dr. strange love "+nextProps.id);
+        if(nextProps.id != this.state.id){
             this.setState({
-                level: nextProps.level,
+                id: nextProps.id,
             }, function (){
                 this.load();
             });
@@ -30,8 +30,8 @@ export default class MapInfo extends React.Component {
 
     load() {
 
-        const response = loadUnitInfoLvl(this.state.level).then(({organisationUnits}) => organisationUnits);
-        console.log("this props level "+ this.state.level);
+        const response = searchBy("parent.id", this.state.id);
+        console.log("this props id "+ this.state.id);
         response.then((unit) => {
             var result = unit.map(function (a) {
                 return {

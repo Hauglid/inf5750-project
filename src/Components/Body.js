@@ -10,15 +10,15 @@ export default class Body extends React.Component {
         super();
 
         this.state = {
-            id: "",
+            id: "ImspTQPwCqd",
         };
     }
-    updateId(level){
-        console.log(level);
+    updateId(id){
+        console.log(id);
         this.setState({
-            level: level,
+            id: id,
         }, function(){
-            console.log(this.state.level);
+            console.log(this.state.id);
         });
     }
 
@@ -34,7 +34,7 @@ export default class Body extends React.Component {
         return (
             <div style={styleDiv.root}>
                 <Paper style={{width:"20%"}} zDepth={3} >
-                    <MapInfo level={this.state.level}/>
+                    <MapInfo id={this.state.id}/>
                 </Paper>
                 <Paper  zDepth={3} style={{margin:"0px 5px", padding: "10px", height: 500, width: "53%"}}>
                         <Map updateId={this.updateId.bind(this)} id={this.state.id}/>
