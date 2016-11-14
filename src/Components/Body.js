@@ -12,14 +12,11 @@ export default class Body extends React.Component {
         super();
 
         this.state = {
-<<<<<<< HEAD
-            level: 2,
             unitInfo: [],
-=======
             id: "ImspTQPwCqd",
->>>>>>> master
         };
     }
+
     updateId(id){
         console.log(id);
         this.setState({
@@ -66,11 +63,7 @@ export default class Body extends React.Component {
                     <MapInfo id={this.state.id}/>
                 </Paper>
                 <Paper  zDepth={3} style={{margin:"0px 5px", padding: "10px", height: 500, width: "53%"}}>
-<<<<<<< HEAD
-                    <Map updateId={this.updateId.bind(this)}/>
-=======
-                        <Map updateId={this.updateId.bind(this)} id={this.state.id}/>
->>>>>>> master
+                    <Map updateId={this.updateId.bind(this)} id={this.state.id}/>
                 </Paper>
                 <Paper style={{width:"25%"}}  zDepth={3} >
                     <OrgUnitInfo unitInfo={this.state.unitInfo} />
