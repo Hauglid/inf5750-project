@@ -28,7 +28,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
 ));
 
 var lvl = 0;
-
+var key = 0;
 
 export default class Map extends React.Component {
     constructor() {
@@ -52,6 +52,9 @@ export default class Map extends React.Component {
         this.handlePolyClick = this.handlePolyClick.bind(this);
         this.drawDistrict = this.drawDistrict.bind(this);
         this.setMarkers = this.setMarkers.bind(this);
+        this.updateMap = this.updateMap.bind(this);
+        this.handleMapClick = this.handleMapClick.bind(this);
+        this.returnSingleDistrict = this.returnSingleDistrict.bind(this);
     }
 
     componentDidMount() {
@@ -69,68 +72,86 @@ export default class Map extends React.Component {
         //default is sierra Leone id
         this.drawDistrict("ImspTQPwCqd")
     }
+
+    returnSingleDistrict(response,currentId){
+        var latLng = [];
+        var last = null;
+        var newPoly = [];
+        response = response.split("[");
+        //console.log(response);
+        for(var i = 0; i < response.length; i++){
+
+            if(response[i] != ""){
+                response[i] = response[i].replace("],", "");
+                response[i] = response[i].replace("]]]]", "");
+                response[i] = response[i].split(",");
+
+                var  newCord = {
+                    lat: parseFloat(response[i][1]),
+                    lng: parseFloat(response[i][0]),
+                };
+
+                if(last != null){
+                    //this is used to draw better shapes.. Not perfect, but better
+                    if(getDistance(last, newCord) > 10000){
+                        newPoly.push({
+                            strokeColor: "#000",
+                            path: latLng,
+                            key: key,
+                            id: currentId,
+                        });
+                        latLng = [];
+                        key++;
+                    }else{
+                        latLng.push(newCord);
+                    }
+                }else{
+                    latLng.push(newCord);
+                }
+                last = newCord;
+            }
+        }
+        newPoly.push({
+            strokeColor: "#000",
+            path: latLng,
+            key: key,
+            id: currentId,
+        });
+        key++;
+        return newPoly;
+    }
+
     //works for level 1,2,3
     drawDistrict(districtId){
-        var key = 0;
+        var poly = [];
         loadUnitInfo(districtId).then((organisationUnit => {
             var firstResponse = organisationUnit["children"];
-            var newPoly = [];
-            for(var j = 0; j < firstResponse.length; j++){
-                const currentId = firstResponse[j]["id"];
-                loadUnitInfo(currentId).then((metadata => {
-                    var response = metadata["coordinates"];
-                    response = response.split("[");
 
-                    var latLng = [];
-                    var last = null;
+            if(organisationUnit["level"] == 3){
+                poly = this.returnSingleDistrict(organisationUnit["coordinates"]);
+                console.log(districtId);
+                this.setState({
+                    polygon: poly,
+                });
+            }else {
+                for (var j = 0; j < firstResponse.length; j++) {
+                    const currentId = firstResponse[j]["id"];
+                    loadUnitInfo(currentId).then((metadata => {
+                        var response = metadata["coordinates"];
 
-                    for(var i = 0; i < response.length; i++){
-
-                        if(response[i] != ""){
-                            response[i] = response[i].replace("],", "");
-                            response[i] = response[i].replace("]]]]", "");
-                            response[i] = response[i].split(",");
-
-                            var  newCord = {
-                                lat: parseFloat(response[i][1]),
-                                lng: parseFloat(response[i][0]),
-                            };
-
-                            if(last != null){
-                                //this is used to draw better shapes.. Not perfect, but better
-                                if(getDistance(last, newCord) > 10000){
-                                    newPoly.push({
-                                            strokeColor: "#000",
-                                            path: latLng,
-                                            key: key,
-                                            id: currentId,
-                                        });
-                                    lvl = metadata["level"];
-                                    latLng = [];
-                                    key++;
-                                }else{
-                                    latLng.push(newCord);
-                                }
-                            }else{
-                                latLng.push(newCord);
-                            }
-
-                            last = newCord;
+                        var newPoly = this.returnSingleDistrict(response, currentId);
+                        //this should not be this hard......
+                        for (var i = 0; i < newPoly.length; i++) {
+                            poly.push(newPoly[i]);
                         }
-                    }
-                    newPoly.push({
-                        strokeColor: "#000",
-                        path: latLng,
-                        key: key,
-                        id: currentId,
-                    });
-                    lvl = metadata["level"];
-                    key++;
-                    this.setState({
-                        polygon: newPoly,
-                    });
 
-                }));
+                        lvl = metadata["level"];
+                        this.setState({
+                            polygon: poly,
+                        });
+
+                    }));
+                }
             }
         }));
     }
@@ -189,6 +210,29 @@ export default class Map extends React.Component {
             });
             this.drawDistrict(polygon.id);
         }
+    }
+    updateMap(districtId){
+        this.setState({
+            polygon: [],
+            markers: [],
+        });
+
+        loadUnitInfo(districtId).then((organisationUnit => {
+            if(organisationUnit["id"] < 3){
+                this.drawDistrict(districtId);
+            }else if(organisationUnit["id"] == 3){
+                this.drawDistrict(districtId);
+                this.setMarkers(districtId);
+            }else{
+                this.drawDistrict(organisationUnit["parent"]["id"]);
+                this.setMarkers(districtId);
+            }
+        }));
+    }
+
+    handleMapClick(){
+        console.log("map is clicked");
+        this.updateMap("ObV5AR1NECl");
     }
 
     render() {
