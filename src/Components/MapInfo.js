@@ -1,5 +1,5 @@
 import React from 'react';
-import {loadAllUnits} from '../api';
+import {loadUnitInfoLvl} from '../api';
 import {List, ListItem} from 'material-ui/List';
 
 export default class MapInfo extends React.Component {
@@ -19,7 +19,7 @@ export default class MapInfo extends React.Component {
 
     load() {
 
-        const response = loadAllUnits();
+        const response = loadUnitInfoLvl(this.props.level).then(({organisationUnits}) => organisationUnits);
         response.then((unit) => {
             var result = unit.map(function (a) {
                 return {

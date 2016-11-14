@@ -6,6 +6,13 @@ import MapInfo from "./MapInfo"
 
 
 export default class Body extends React.Component {
+    constructor() {
+        super();
+
+        this.state = {
+            level: 2,
+        };
+    }
 
     render() {
         const styleDiv = {
@@ -19,7 +26,7 @@ export default class Body extends React.Component {
         return (
             <div style={styleDiv.root}>
                 <Paper style={{width:"20%"}} zDepth={3} >
-                    <MapInfo />
+                    <MapInfo level={this.state.level}/>
                 </Paper>
                 <Paper  zDepth={3} style={{margin:"0px 5px", padding: "10px", height: 500, width: "53%"}}>
                         <Map/>
