@@ -28,19 +28,14 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
     </GoogleMap>
 ));
 
+var lvl = 0;
+
 
 export default class Map extends React.Component {
     constructor() {
         super();
         this.state = {
-            markers: [{
-                position: {
-                    lat: 25.0112183,
-                    lng: 121.52067570000001,
-                },
-                key: `Taiwan`,
-                defaultAnimation: 2,
-            }],
+            markers: [],
             polygon: [{
                 strokeColor: "#000",
                 path: [],
@@ -88,7 +83,6 @@ export default class Map extends React.Component {
                     response = response.split("[");
 
                     var latLng = [];
-
                     var last = null;
 
                     for(var i = 0; i < response.length; i++){
@@ -111,9 +105,8 @@ export default class Map extends React.Component {
                                             path: latLng,
                                             key: key,
                                             id: currentId,
-                                            level: metadata["level"],
                                         });
-
+                                    lvl = metadata["level"];
                                     latLng = [];
                                     key++;
                                 }else{
@@ -131,8 +124,8 @@ export default class Map extends React.Component {
                         path: latLng,
                         key: key,
                         id: currentId,
-                        level: metadata["level"],
                     });
+                    lvl = metadata["level"];
                     key++;
                     this.setState({
                         polygon: newPoly,
@@ -142,9 +135,44 @@ export default class Map extends React.Component {
             }
         }));
     }
+    //works for lvl4
+    setMarkers(districtId) {
+        var key = 0;
+        var newMarkers = [];
+        loadUnitInfo(districtId).then((organisationUnit => {
+            var firstResponse = organisationUnit["children"];
+
+            for (var i = 0; i < firstResponse.length; i++) {
+                const currentId = firstResponse[i]["id"];
+                loadUnitInfo(currentId).then((metadata => {
+                    var coordinates = metadata["coordinates"];
+                    if(coordinates != undefined){
+                        coordinates = coordinates.split(",");
+
+                        coordinates = coordinates.map(function(a){
+                            var ret = a.replace("[", "");
+                            ret = ret.replace("]", "");
+                            return ret;
+                        });
+                        newMarkers.push({
+                            position: {
+                                lat: parseFloat(coordinates[1]),
+                                lng: parseFloat(coordinates[0]),
+                            },
+                            key: key,
+                            id: currentId,
+                        });
+                        key++;
+                    }
+                    this.setState({
+                        markers: newMarkers,
+                    })
+                }));
+            }
+        }));
+    }
 
     handlePolyClick(polygon){
-
         const center = findCenter(polygon.path);
         this.setState({
             polygon: [],
@@ -152,8 +180,8 @@ export default class Map extends React.Component {
             zoom: this.state.zoom +1,
         });
 
-        if(polygon.level > 2){
-            //do something here
+        if(lvl > 2){
+            this.setMarkers(polygon.id);
         }else{
             this.drawDistrict(polygon.id);
         }
