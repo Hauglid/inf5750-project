@@ -1,7 +1,8 @@
 import React from 'react';
-import {loadOrganisationUnits, loadUnitInfo, searchByName} from '../api';
+import {loadOrganisationUnits, loadUnitInfo, searchBy} from '../api';
 import TextFields from './TextFields';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 
 export default class OrgUnitInfo extends React.Component {
     constructor() {
@@ -12,12 +13,19 @@ export default class OrgUnitInfo extends React.Component {
             isLoading: false,
             unitInfo: [],
             editing: false,
+            items: [],
+            displayName: "",
+            openingDate: "",
+            coordinates: "",
+            id: "",
         };
         this.switchToEdit = this.switchToEdit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
         this.loadUnitInfo();
+        this.loadInfo();
     }
 
 
@@ -38,32 +46,47 @@ export default class OrgUnitInfo extends React.Component {
             this.setState({
                 unitInfo: organisationUnit,
             });
-        });
+        })
+            .then(() => {
+                this.setState({
+                    displayName: this.state.unitInfo["displayName"],
+                    openingDate: this.state.unitInfo["openingDate"],
+                    coordinates: this.state.unitInfo["coordinates"],
+                    id: this.state.unitInfo["id"],
+                })
+            });
     }
 
     switchToEdit() {
-        this.setState({editing: true});
-        console.log(searchByName("Kay"));
+        this.setState({editing: !this.state.editing});
+        console.log(this.state.items);
     }
+
+    handleChange(cat, event) {
+        var info = this.state.unitInfo;
+        info[cat] = event.target.value;
+        console.log(this.state.unitInfo[cat]);
+        this.setState({
+            unitInfo: info,
+        });
+    };
 
     render() {
 
         return (
             <div>
                 <TextFields fullWidth={true} style={{fontSize: '20px', fontWeight: 'bold'}} value="Organisational Unit Information"/>
-                <RaisedButton label="Edit" primary={true} onClick={this.switchToEdit}/>
+                <RaisedButton label={this.state.editing ? "Cancel" : "Edit"} primary={true} onClick={this.switchToEdit}/>
                 <br/>
                 <div>
-                    <TextFields underLineShow={this.state.editing} category="Name" value={this.state.unitInfo["displayName"]} />
+                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "displayName")} underlineShow={this.state.editing} floatingLabelText="Name" value={this.state.unitInfo["displayName"]} />
                     <br/>
-                    <TextFields underLineShow={this.state.editing} category="Opening date" value={this.state.unitInfo["openingDate"]} />
+                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "openingDate")} underlineShow={this.state.editing} floatingLabelText="Opening date" value={this.state.unitInfo["openingDate"]} />
                     <br/>
-                    <TextFields underLineShow={this.state.editing} category="Coordinates" value={this.state.unitInfo["coordinates"]} />
+                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "coordinates")} underlineShow={this.state.editing} floatingLabelText="Coordinates" value={this.state.unitInfo["coordinates"]} />
                     <br/>
-                    <TextFields underLineShow={this.state.editing} category="ID" value={this.state.unitInfo["id"]} />
+                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "id")} underlineShow={this.state.editing} floatingLabelText="ID" value={this.state.unitInfo["id"]} />
                     <br/>
-                    <TextFields hintText="Hint" value=""/>
-
 
 
                 </div>

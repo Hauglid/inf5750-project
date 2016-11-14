@@ -40,14 +40,24 @@ export function loadOrganisationUnits() {
         .then(({ organisationUnits }) => organisationUnits);
 }
 
+export function loadAllUnits(){
+    console.log("api.loadAllUnits");
+    return fetch(`${serverUrl}/organisationUnits`, fetchOptions)
+        .then(onlySuccessResponses)
+        .then(response => response.json())
+        .then(({organisationUnits}) => organisationUnits);
+
+}
+
 export function loadUnitInfo(unitId) {
     return fetch(`${serverUrl}/organisationUnits/${unitId}`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json());
 }
 
-export function searchByName(name) {
-    return fetch(`${serverUrl}/organisationUnits/?paging=false&filter=name:like:${name}`, fetchOptions)
+export function searchBy(filter, value) {
+    console.log("api.searchBy");
+    return fetch(`${serverUrl}/organisationUnits/?paging=false&filter=${filter}:^ilike:${value}`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         .then(({organisationUnits}) => organisationUnits);
