@@ -12,7 +12,6 @@ export default class Body extends React.Component {
         super();
 
         this.state = {
-            level: 2,
             unitInfo: [],
             id: "ImspTQPwCqd",
         };
