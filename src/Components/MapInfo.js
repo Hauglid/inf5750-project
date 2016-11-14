@@ -51,7 +51,6 @@ export default class MapInfo extends React.Component {
 
         return (
             <List style={{height: 500, overflowY: "scroll"}}>
-                <h2>Henter bare 50 forste</h2>
                 {this.state.unitInfo.map(function (item) {
                     return (
                         <ListItem
