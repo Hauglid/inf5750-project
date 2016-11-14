@@ -50,7 +50,7 @@ export default class Body extends React.Component {
 
                 </Paper>
                 <Paper  zDepth={3} style={{margin:"0px 5px", padding: "10px", height: 500, width: "53%"}}>
-                        <Map center={location} markers={markers} poly={triangleCoords}/>
+                        <Map/>
                 </Paper>
                 <Paper style={{width:"25%"}}  zDepth={3} >
                     <OrgUnitInfo />
