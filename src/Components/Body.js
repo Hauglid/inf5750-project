@@ -13,6 +13,14 @@ export default class Body extends React.Component {
             level: 2,
         };
     }
+    updateId(level){
+        console.log(level);
+        this.setState({
+            level: level,
+        }, function(){
+            console.log(this.state.level);
+        });
+    }
 
     render() {
         const styleDiv = {
@@ -29,7 +37,7 @@ export default class Body extends React.Component {
                     <MapInfo level={this.state.level}/>
                 </Paper>
                 <Paper  zDepth={3} style={{margin:"0px 5px", padding: "10px", height: 500, width: "53%"}}>
-                        <Map/>
+                        <Map updateId={this.updateId.bind(this)}/>
                 </Paper>
                 <Paper style={{width:"25%"}}  zDepth={3} >
                     <OrgUnitInfo />

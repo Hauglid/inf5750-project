@@ -186,7 +186,7 @@ export default class Map extends React.Component {
                     }
                     this.setState({
                         markers: newMarkers,
-                    })
+                    });
                 }));
             }
         }));
@@ -210,6 +210,7 @@ export default class Map extends React.Component {
             });
             this.drawDistrict(polygon.id);
         }
+        this.props.updateId(polygon.id);
     }
     updateMap(districtId){
         this.setState({
