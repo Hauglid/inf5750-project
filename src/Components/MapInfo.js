@@ -16,7 +16,6 @@ export default class MapInfo extends React.Component {
                 id: 0,
             }]
         };
-        this.lvlOne = this.lvlOne.bind(this);
         this.load = this.load.bind(this);
     }
 
@@ -39,22 +38,6 @@ export default class MapInfo extends React.Component {
             });
 
         })
-    }
-
-
-    lvlOne() {
-        loadLvlOne().then((lvlOne) => {
-                const newUnit = lvlOne.map(function (id, name) {
-                    return {name: name, id: id}
-                });
-                this.setState({
-                    unitInfo: newUnit,
-                }, function () {
-                    console.log(newUnit)
-                });
-            }
-        )
-        ;
     }
 
 
