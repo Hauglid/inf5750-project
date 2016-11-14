@@ -1,7 +1,6 @@
 import React from 'react';
 import Map from "./Map"
 import OrgUnitInfo from "./OrgUnitInfo"
-import MapInfo from "./MapInfo"
 import Paper from 'material-ui/Paper';
 
 
@@ -48,7 +47,6 @@ export default class Body extends React.Component {
         return (
             <div style={styleDiv.root}>
                 <Paper style={{width:"20%"}} zDepth={3} >
-                    <MapInfo/>
 
                 </Paper>
                 <Paper  zDepth={3} style={{margin:"0px 5px", padding: "10px", height: 500, width: "53%"}}>

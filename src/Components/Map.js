@@ -1,7 +1,7 @@
 import React from 'react';
 import {withGoogleMap, GoogleMap, Marker, Polygon} from "react-google-maps"
 import {loadUnitInfo, loadUnitInfoLvl} from '../api'
-import {getDistance, findCenter} from './Toolbox'
+import {getDistance, findCenter, removeEveryThingBut} from './Toolbox'
 
 
 const GettingStartedGoogleMap = withGoogleMap(props => (
@@ -174,15 +174,20 @@ export default class Map extends React.Component {
 
     handlePolyClick(polygon){
         const center = findCenter(polygon.path);
-        this.setState({
-            polygon: [],
-            center: center,
-            zoom: this.state.zoom +1,
-        });
 
         if(lvl > 2){
+            this.setState({
+                polygon: removeEveryThingBut(this.state.polygon, polygon.id),
+                center: center,
+                zoom: this.state.zoom +1,
+            });
             this.setMarkers(polygon.id);
         }else{
+            this.setState({
+                polygon: [],
+                center: center,
+                zoom: this.state.zoom +1,
+            });
             this.drawDistrict(polygon.id);
         }
     }

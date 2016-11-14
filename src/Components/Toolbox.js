@@ -45,3 +45,14 @@ export function findCenter(polygon){
     }
     return center;
 }
+export function removeEveryThingBut(array, keep){
+    var ret = array;
+
+    for(var i = ret.length-1; i>= 0; i--){
+
+        if(ret[i].id != keep){
+            ret.splice(i,1);
+        }
+    }
+    return ret;
+}
