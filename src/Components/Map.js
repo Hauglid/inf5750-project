@@ -60,6 +60,9 @@ export default class Map extends React.Component {
     componentDidMount() {
         this.onLoad();
     }
+    componentWillReceiveProps(nextProps){
+
+    }
 
     handleMapLoad(map) {
         this._mapComponent = map;
