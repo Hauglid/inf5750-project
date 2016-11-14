@@ -20,7 +20,7 @@ export default class OrgUnitInfo extends React.Component {
     }
 
     componentDidMount() {
-        this.loadUnitInfo();
+        //this.loadUnitInfo();
         this.loadInfo();
     }
 
@@ -42,15 +42,7 @@ export default class OrgUnitInfo extends React.Component {
             this.setState({
                 unitInfo: organisationUnit,
             });
-        })
-            .then(() => {
-                this.setState({
-                    displayName: this.state.unitInfo["displayName"],
-                    openingDate: this.state.unitInfo["openingDate"],
-                    coordinates: this.state.unitInfo["coordinates"],
-                    id: this.state.unitInfo["id"],
-                })
-            });
+        });
     }
 
     switchToEdit() {
@@ -75,13 +67,13 @@ export default class OrgUnitInfo extends React.Component {
                 <RaisedButton label={this.state.editing ? "Cancel" : "Edit"} primary={true} onClick={this.switchToEdit}/>
                 <br/>
                 <div>
-                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "displayName")} underlineShow={this.state.editing} floatingLabelText="Name" value={this.state.unitInfo["displayName"]} />
+                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "displayName")} underlineShow={this.state.editing} floatingLabelText="Name" value={this.props.unitInfo["displayName"]} />
                     <br/>
-                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "openingDate")} underlineShow={this.state.editing} floatingLabelText="Opening date" value={this.state.unitInfo["openingDate"]} />
+                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "openingDate")} underlineShow={this.state.editing} floatingLabelText="Opening date" value={this.props.unitInfo["openingDate"]} />
                     <br/>
-                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "coordinates")} underlineShow={this.state.editing} floatingLabelText="Coordinates" value={this.state.unitInfo["coordinates"]} />
+                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "coordinates")} underlineShow={this.state.editing} floatingLabelText="Coordinates" value={this.props.unitInfo["coordinates"]} />
                     <br/>
-                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "id")} underlineShow={this.state.editing} floatingLabelText="ID" value={this.state.unitInfo["id"]} />
+                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "id")} underlineShow={this.state.editing} floatingLabelText="ID" value={this.props.unitInfo["id"]} />
                     <br/>
 
 
