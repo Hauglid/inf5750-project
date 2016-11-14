@@ -14,7 +14,6 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
         {props.markers.map(marker => (
             <Marker
                 {...marker}
-                onRightClick={() => props.onMarkerRightClick(marker)}
             />
         ))}
 
@@ -49,10 +48,10 @@ export default class Map extends React.Component {
             },
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
-        this.handleMapClick = this.handleMapClick.bind(this);
-        this.handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
         this.onLoad = this.onLoad.bind(this);
         this.handlePolyClick = this.handlePolyClick.bind(this);
+        this.drawDistrict = this.drawDistrict.bind(this);
+        this.setMarkers = this.setMarkers.bind(this);
     }
 
     componentDidMount() {
@@ -190,30 +189,6 @@ export default class Map extends React.Component {
             });
             this.drawDistrict(polygon.id);
         }
-    }
-
-    handleMapClick(event) {
-
-        const nextMarkers = [
-            ...this.state.markers,
-            {
-                position: event.latLng,
-                defaultAnimation: 2,
-                key: Date.now(),
-            },
-        ];
-        this.setState({
-            markers: nextMarkers,
-            zoom: this.state.zoom +1,
-        });
-    }
-
-    handleMarkerRightClick(targetMarker) {
-
-        const nextMarkers = this.state.markers.filter(marker => marker !== targetMarker);
-        this.setState({
-            markers: nextMarkers,
-        });
     }
 
     render() {
