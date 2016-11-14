@@ -14,10 +14,6 @@ export default class OrgUnitInfo extends React.Component {
             unitInfo: [],
             editing: false,
             items: [],
-            displayName: "",
-            openingDate: "",
-            coordinates: "",
-            id: "",
         };
         this.switchToEdit = this.switchToEdit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -75,7 +71,7 @@ export default class OrgUnitInfo extends React.Component {
 
         return (
             <div>
-                <TextFields fullWidth={true} style={{fontSize: '20px', fontWeight: 'bold'}} value="Organisational Unit Information"/>
+                <TextField fullWidth={true} style={{fontSize: '20px', fontWeight: 'bold'}} value="Organisational Unit Information"/>
                 <RaisedButton label={this.state.editing ? "Cancel" : "Edit"} primary={true} onClick={this.switchToEdit}/>
                 <br/>
                 <div>
