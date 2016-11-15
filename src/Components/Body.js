@@ -3,7 +3,6 @@ import Map from "./Map"
 import OrgUnitInfo from "./OrgUnitInfo"
 import Paper from 'material-ui/Paper';
 import MapInfo from "./MapInfo"
-import {loadUnitInfo} from '../api';
 
 
 
@@ -12,7 +11,6 @@ export default class Body extends React.Component {
         super();
 
         this.state = {
-            unitInfo: [],
             id: "ImspTQPwCqd",
         };
     }
@@ -24,19 +22,6 @@ export default class Body extends React.Component {
         }, function(){
             console.log(this.state.id);
         });
-    }
-
-    loadUnitInfo(id) {
-        console.log("Loading unit info...");
-        loadUnitInfo(id).then((organisationUnit) => {
-            this.setState({
-                unitInfo: organisationUnit,
-            });
-        });
-    }
-
-    componentDidMount() {
-        this.loadUnitInfo("eoYV2p74eVz");
     }
 
     updateId(level){
@@ -66,7 +51,7 @@ export default class Body extends React.Component {
                     <Map updateId={this.updateId.bind(this)} id={this.state.id}/>
                 </Paper>
                 <Paper style={{width:"25%"}}  zDepth={3} >
-                    <OrgUnitInfo unitInfo={this.state.unitInfo} />
+                    <OrgUnitInfo id={this.state.id} />
                 </Paper>
 
             </div>
