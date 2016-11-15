@@ -18,24 +18,24 @@ export default class OrgUnitInfo extends React.Component {
             items: [],
             id: "",
         };
-        this.switchToEdit = this.switchToEdit.bind(this);
+        this.editButton = this.editButton.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.newUnit = this.newUnit.bind(this);
     }
 
     componentDidMount() {
         this.loadUnitInfo(this.props.id);
-        this.loadInfo();
     }
 
-
-    loadInfo() {
-        console.log("loading");
-        loadOrganisationUnits().then((organisationUnits) => {
-            this.setState({
-                items:organisationUnits,
-            });
-        });
-    }
+    //
+    // loadInfo() {
+    //     console.log("loading");
+    //     loadOrganisationUnits().then((organisationUnits) => {
+    //         this.setState({
+    //             items:organisationUnits,
+    //         });
+    //     });
+    // }
 
     // loads the information about an organisation unit
     loadUnitInfo(id) {
@@ -47,26 +47,41 @@ export default class OrgUnitInfo extends React.Component {
         });
     }
 
-    switchToEdit() {
+    editButton() {
         this.setState({editing: !this.state.editing});
-        console.log(this.state.items);
     }
 
-    handleChange(cat, event) {
+    handleChange(category, event) {
         var info = this.state.unitInfo;
-        info[cat] = event.target.value;
-        console.log(this.state.unitInfo[cat]);
+        info[category] = event.target.value;
         this.setState({
             unitInfo: info,
         });
     };
 
+    newUnit() {
+        console.log(this.state.oldUnitInfo);
+        this.setState({
+            editing: !this.state.editing,
+            oldUnitInfo: this.state.unitInfo}, function() {console.log(this.state.oldUnitInfo)});
+        this.setState({
+            unitInfo: {
+                displayName: "",
+                openingDate: "",
+                coordinates: "",
+                id: "",
+            }}, function() {console.log(this.state.unitInfo)
+        });
+    }
+
+
     render() {
 
         return (
             <div>
-                <TextField fullWidth={true} style={{fontSize: '20px', fontWeight: 'bold'}} value="Organisational Unit Information"/>
-                <RaisedButton label={this.state.editing ? "Cancel" : "Edit"} primary={true} onClick={this.switchToEdit}/>
+                <TextField fullWidth={true} style={{fontSize: '20px', fontWeight: 'bold'}} value="Unit Information"/>
+                <RaisedButton label={this.state.editing ? "Cancel" : "Edit"} primary={this.state.editing ? false : true} onClick={this.editButton}/>
+                <RaisedButton label={this.state.editing ? "Save" : "New"} primary={true} onClick={this.newUnit}/>
                 <br/>
                 <div>
                     <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "displayName")} underlineShow={this.state.editing} floatingLabelText="Name" value={this.state.unitInfo["displayName"]} />
