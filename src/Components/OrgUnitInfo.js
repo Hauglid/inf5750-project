@@ -19,6 +19,8 @@ export default class OrgUnitInfo extends React.Component {
             id: "",
         };
         this.editButton = this.editButton.bind(this);
+        this.saveButton = this.saveButton.bind(this);
+        this.cancelButton = this.cancelButton.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.newUnit = this.newUnit.bind(this);
     }
@@ -47,9 +49,6 @@ export default class OrgUnitInfo extends React.Component {
         });
     }
 
-    editButton() {
-        this.setState({editing: !this.state.editing});
-    }
 
     handleChange(category, event) {
         var info = this.state.unitInfo;
@@ -60,10 +59,11 @@ export default class OrgUnitInfo extends React.Component {
     };
 
     newUnit() {
-        console.log(this.state.oldUnitInfo);
+        console.log("New");
+        // console.log(this.state.oldUnitInfo);
         this.setState({
-            editing: !this.state.editing,
-            oldUnitInfo: this.state.unitInfo}, function() {console.log(this.state.oldUnitInfo)});
+            editing: true,
+            oldUnitInfo: this.state.unitInfo}/*, function() {console.log(this.state.oldUnitInfo)}*/);
         this.setState({
             unitInfo: {
                 displayName: "",
@@ -74,14 +74,53 @@ export default class OrgUnitInfo extends React.Component {
         });
     }
 
+    editButton() {
+        this.setState({
+            editing: true,
+            oldUnitInfo: this.state.unitInfo
+        }, function() {
+            console.log(this.state.oldUnitInfo);
+        });
+        console.log("Edit");
+        // this.setState({
+        //     unitInfo: {
+        //         displayName: "",
+        //         openingDate: "",
+        //         coordinates: "",
+        //         id: "",
+        //     }}, function() {console.log(this.state.unitInfo)
+        // });
+    }
+
+    cancelButton() {
+        console.log("Cancel");
+        console.log(this.state.oldUnitInfo);
+        this.setState({
+            editing: false,
+            unitInfo: this.state.oldUnitInfo
+        }, function() {console.log(this.state.unitInfo)});
+
+    }
+
+    saveButton() {
+        console.log("Save");
+        this.setState({editing: false});
+    }
+
 
     render() {
 
         return (
             <div>
                 <TextField fullWidth={true} style={{fontSize: '20px', fontWeight: 'bold'}} value="Unit Information"/>
-                <RaisedButton label={this.state.editing ? "Cancel" : "Edit"} primary={this.state.editing ? false : true} onClick={this.editButton}/>
-                <RaisedButton label={this.state.editing ? "Save" : "New"} primary={true} onClick={this.newUnit}/>
+                <RaisedButton
+                    label={this.state.editing ? "Cancel" : "Edit"}
+                    onClick={this.state.editing ? this.cancelButton : this.editButton}
+                    primary={this.state.editing ? false : true}/>
+                <RaisedButton
+                    label={this.state.editing ? "Save" : "New"}
+                    primary={true}
+                    onClick={this.state.editing ? this.saveButton : this.newUnit}/>
                 <br/>
                 <div>
                     <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "displayName")} underlineShow={this.state.editing} floatingLabelText="Name" value={this.state.unitInfo["displayName"]} />
