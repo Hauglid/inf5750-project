@@ -18,7 +18,6 @@ export default class MapInfo extends React.Component {
         this.load();
     }
     componentWillReceiveProps(nextProps){
-        console.log("calling dr. strange love "+nextProps.id);
         if(nextProps.id != this.state.id){
             this.setState({
                 id: nextProps.id,
@@ -31,7 +30,6 @@ export default class MapInfo extends React.Component {
     load() {
 
         const response = searchBy("parent.id", this.state.id);
-        console.log("this props id "+ this.state.id);
         response.then((unit) => {
             var result = unit.map(function (a) {
                 return {
