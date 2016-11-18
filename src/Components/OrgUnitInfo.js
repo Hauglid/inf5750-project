@@ -78,14 +78,7 @@ export default class OrgUnitInfo extends React.Component {
         }
         //, function() {console.log(this.state.oldUnitInfo);}
         );
-        // this.setState({
-        //     unitInfo: {
-        //         displayName: this.state.oldUnitInfo["displayName"],
-        //         openingDate: this.state.oldUnitInfo["openingDate"],
-        //         coordinates: this.state.oldUnitInfo["coordinates"],
-        //         id: this.state.oldUnitInfo["id"],
-        //     }}, function() {console.log(this.state.unitInfo)
-        // });
+
     }
 
     cancelButton() {
