@@ -117,6 +117,16 @@ export default class OrgUnitInfo extends React.Component {
         );
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.id != this.state.id){
+            this.setState({
+                id: nextProps.id,
+            }, function (){
+                this.loadUnitInfo(this.state.id);
+            });
+        }
+    }
+
 
     render() {
 
