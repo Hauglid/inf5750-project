@@ -219,16 +219,21 @@ export default class Map extends React.Component {
         this.props.updateId(marker.id);
     }
     updateMap(districtId){
-        this.setState({
-            polygon: [],
-            markers: [],
-            id: districtId,
-        });
 
         loadUnitInfo(districtId).then((organisationUnit => {
             if(organisationUnit["level"] < 3){
+                this.setState({
+                    polygon: [],
+                    markers: [],
+                    id: districtId,
+                });
                 this.drawDistrict(districtId);
-            }else{
+            }else if(organisationUnit["level"] == 3){
+                this.setState({
+                    polygon: [],
+                    markers: [],
+                    id: districtId,
+                });
                 this.drawDistrict(districtId);
                 this.setMarkers(districtId);
             }
