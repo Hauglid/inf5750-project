@@ -1,7 +1,7 @@
 import React from 'react';
 import {withGoogleMap, GoogleMap, Marker, Polygon} from "react-google-maps"
 import {loadUnitInfo} from '../api'
-import {getDistance, findCenter, removeEveryThingBut} from './Toolbox'
+import {getDistance, findCenter} from './Toolbox'
 
 
 const GettingStartedGoogleMap = withGoogleMap(props => (
@@ -70,7 +70,7 @@ export default class Map extends React.Component {
     handleMapLoad(map) {
         this._mapComponent = map;
         if (map) {
-            //console.log(map.getZoom());
+            //console.log("helloooooo" +map.getZoom());
         }
     }
 
@@ -135,7 +135,6 @@ export default class Map extends React.Component {
 
             if(organisationUnit["level"] == 3){
                 poly = this.returnSingleDistrict(organisationUnit["coordinates"]);
-                console.log(districtId);
                 this.setState({
                     polygon: poly,
                 });
@@ -200,23 +199,20 @@ export default class Map extends React.Component {
 
     handlePolyClick(polygon){
         const center = findCenter(polygon.path);
-        /*
-        if(lvl > 2){
-            this.setState({
-                polygon: removeEveryThingBut(this.state.polygon, polygon.id),
-                center: center,
-                zoom: this.state.zoom +1,
-            });
-            this.setMarkers(polygon.id);
-        }else{
-            this.setState({
-                polygon: [],
-                center: center,
-                zoom: this.state.zoom +1,
-            });
-            this.drawDistrict(polygon.id);
+        var path = polygon.path;
+        var bounds = new google.maps.LatLngBounds();
+        for(var i = 0; i < path.length; i++){
+            bounds.extend(path[i]);
         }
-        */
+
+        //console.log("STATUS: "+this.context.hasMap());
+        this._mapComponent.fitBounds(bounds);
+
+
+
+        this.setState({
+           center: center,
+        });
         this.props.updateId(polygon.id);
     }
     updateMap(districtId){
@@ -229,12 +225,8 @@ export default class Map extends React.Component {
         loadUnitInfo(districtId).then((organisationUnit => {
             if(organisationUnit["level"] < 3){
                 this.drawDistrict(districtId);
-                console.log("district ID: "+districtId);
-            }else if(organisationUnit["id"] == 3){
-                this.drawDistrict(districtId);
-                this.setMarkers(districtId);
             }else{
-                this.drawDistrict(organisationUnit["parent"]["id"]);
+                this.drawDistrict(districtId);
                 this.setMarkers(districtId);
             }
         }));
@@ -242,7 +234,7 @@ export default class Map extends React.Component {
 
     handleMapClick(){
         console.log("map is clicked");
-        this.updateMap("ObV5AR1NECl");
+        //this.updateMap("ObV5AR1NECl");
     }
 
     render() {
