@@ -50,7 +50,8 @@ export default class Search extends React.Component {
     }
 
     onTouchTap() {
-        console.log(this.state.inputValue);
+        this.props.updateId(this.state.inputId);
+        console.log(this.state.inputId);
     }
 
     onNewRequest(inputValue) {
