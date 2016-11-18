@@ -64,7 +64,9 @@ export default class OrgUnitInfo extends React.Component {
                 openingDate: "",
                 coordinates: "",
                 id: ""
-            }}, function() {console.log(this.state.unitInfo);});
+            }}
+            //, function() {console.log(this.state.unitInfo);}
+        );
 
     }
 
