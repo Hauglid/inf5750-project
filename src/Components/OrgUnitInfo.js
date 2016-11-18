@@ -36,7 +36,7 @@ export default class OrgUnitInfo extends React.Component {
 
     // loads the information about an organisation unit
     loadUnitInfo(id) {
-        console.log("Loading unit info..." + id);
+        console.log("Loading unit info...");
         loadUnitInfo(id).then((organisationUnit) => {
             this.setState({
                 unitInfo: organisationUnit,
@@ -73,9 +73,9 @@ export default class OrgUnitInfo extends React.Component {
         this.setState({
             editing: true,
             oldUnitInfo: this.state.unitInfo,
-        }, function() {
-            console.log(this.state.oldUnitInfo);
-        });
+        }
+        //, function() {console.log(this.state.oldUnitInfo);}
+        );
         // this.setState({
         //     unitInfo: {
         //         displayName: this.state.oldUnitInfo["displayName"],
@@ -88,11 +88,13 @@ export default class OrgUnitInfo extends React.Component {
 
     cancelButton() {
         console.log("Cancel");
-        // console.log(this.state.oldUnitInfo);
+        this.loadUnitInfo(this.props.id);
+
         this.setState({
-            unitInfo: this.state.oldUnitInfo,
             editing: false,
-        }, function() {console.log(this.state.unitInfo)});
+        }
+        //, function() {console.log(this.state.unitInfo)}
+        );
 
     }
 
