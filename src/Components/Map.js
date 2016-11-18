@@ -58,6 +58,7 @@ export default class Map extends React.Component {
         this.handleMapClick = this.handleMapClick.bind(this);
         this.returnSingleDistrict = this.returnSingleDistrict.bind(this);
         this.handleMarkerClick = this.handleMarkerClick.bind(this);
+        this.updateBounds = this.updateBounds.bind(this);
     }
 
     componentDidMount() {
@@ -135,6 +136,10 @@ export default class Map extends React.Component {
         loadUnitInfo(districtId).then((organisationUnit => {
             var firstResponse = organisationUnit["children"];
 
+            var bounds = organisationUnit["coordinates"];
+
+            this.updateBounds(bounds);
+
             if(organisationUnit["level"] == 3){
                 poly = this.returnSingleDistrict(organisationUnit["coordinates"]);
                 this.setState({
@@ -200,19 +205,6 @@ export default class Map extends React.Component {
     }
 
     handlePolyClick(polygon){
-        const center = findCenter(polygon.path);
-        var path = polygon.path;
-        var bounds = new google.maps.LatLngBounds();
-        for(var i = 0; i < path.length; i++){
-            bounds.extend(path[i]);
-        }
-
-        //console.log("STATUS: "+this.context.hasMap());
-        this._mapComponent.fitBounds(bounds);
-
-        this.setState({
-           center: center,
-        });
         this.props.updateId(polygon.id);
     }
     handleMarkerClick(marker){
@@ -243,6 +235,41 @@ export default class Map extends React.Component {
     handleMapClick(){
         console.log("map is clicked");
         //this.updateMap("ObV5AR1NECl");
+    }
+
+    updateBounds(response) {
+
+        if (response != undefined) {
+            var bounds = new google.maps.LatLngBounds();
+
+            response = response.split("[");
+            for (var i = 0; i < response.length; i++) {
+
+                if (response[i] != "") {
+                    response[i] = response[i].replace("],", "");
+                    response[i] = response[i].replace("]]]]", "");
+                    response[i] = response[i].split(",");
+
+                    bounds.extend({
+                        lat: parseFloat(response[i][1]),
+                        lng: parseFloat(response[i][0]),
+                    });
+                }
+            }
+            const center = findCenter(bounds);
+            this.setState({
+                center: center,
+            });
+            this._mapComponent.fitBounds(bounds);
+        }else{
+            this.setState({
+                zoom: 7,
+                center: {
+                    lat: 8.460555,
+                    lng:-11.779889,
+                },
+            })
+        }
     }
 
     render() {
