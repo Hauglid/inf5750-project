@@ -23,15 +23,6 @@ export default class Body extends React.Component {
         });
     }
 
-    updateId(level){
-        console.log(level);
-        this.setState({
-            level: level,
-        }, function(){
-            console.log(this.state.level);
-        });
-    }
-
     render() {
         const styleDiv = {
             root: {
