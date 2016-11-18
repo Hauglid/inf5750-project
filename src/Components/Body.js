@@ -3,6 +3,7 @@ import Map from "./Map"
 import OrgUnitInfo from "./OrgUnitInfo"
 import Paper from 'material-ui/Paper';
 import MapInfo from "./MapInfo"
+import Search from "./Search";
 
 
 
@@ -32,16 +33,20 @@ export default class Body extends React.Component {
         };
 
         return (
-            <div style={styleDiv.root}>
-                <Paper style={{width:"20%"}} zDepth={3} >
-                    <MapInfo updateId={this.updateId.bind(this)} id={this.state.id}/>
-                </Paper>
-                <Paper  zDepth={3} style={{margin:"0px 5px", height: 520, width: "53%"}}>
-                    <Map updateId={this.updateId.bind(this)} id={this.state.id}/>
-                </Paper>
-                <Paper style={{width:"25%"}}  zDepth={3} >
-                    <OrgUnitInfo id={this.state.id} />
-                </Paper>
+            <div>
+                <Search updateId={this.updateId.bind(this)}/>
+
+                <div style={styleDiv.root}>
+                    <Paper style={{width: "20%"}} zDepth={3}>
+                        <MapInfo updateId={this.updateId.bind(this)} id={this.state.id}/>
+                    </Paper>
+                    <Paper zDepth={3} style={{margin: "0px 5px", height: 520, width: "53%"}}>
+                        <Map updateId={this.updateId.bind(this)} id={this.state.id}/>
+                    </Paper>
+                    <Paper style={{width: "25%"}} zDepth={3}>
+                        <OrgUnitInfo id={this.state.id}/>
+                    </Paper>
+                </div>
 
             </div>
         );
