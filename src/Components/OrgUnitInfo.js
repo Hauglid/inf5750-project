@@ -135,6 +135,7 @@ export default class OrgUnitInfo extends React.Component {
                 <div>
                     <TextField
                         disabled={!this.state.editing}
+                        floatingLabelFixed={true}
                         underlineShow={this.state.editing}
                         floatingLabelText="Name"
                         onChange={this.handleChange.bind(this, "displayName")}
@@ -142,6 +143,7 @@ export default class OrgUnitInfo extends React.Component {
                     <br/>
                     <TextField
                         disabled={!this.state.editing}
+                        floatingLabelFixed={true}
                         onChange={this.handleChange.bind(this, "openingDate")}
                         underlineShow={this.state.editing}
                         floatingLabelText="Opening date"
@@ -149,6 +151,7 @@ export default class OrgUnitInfo extends React.Component {
                     <br/>
                     <TextField
                         disabled={!this.state.editing}
+                        floatingLabelFixed={true}
                         onChange={this.handleChange.bind(this, "coordinates")}
                         underlineShow={this.state.editing}
                         floatingLabelText="Coordinates"
@@ -156,6 +159,7 @@ export default class OrgUnitInfo extends React.Component {
                     <br/>
                     <TextField
                         disabled={!this.state.editing}
+                        floatingLabelFixed={true}
                         onChange={this.handleChange.bind(this, "id")}
                         underlineShow={this.state.editing}
                         floatingLabelText="ID"
