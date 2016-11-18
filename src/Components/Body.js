@@ -15,7 +15,7 @@ export default class Body extends React.Component {
         };
     }
     updateId(id){
-        console.log(id);
+        console.log("id changed to "+id);
         this.setState({
             id: id,
         }, function(){

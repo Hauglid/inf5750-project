@@ -13,7 +13,8 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
     >
         {props.markers.map(marker => (
             <Marker
-                {...marker}
+            {...marker}
+                onClick={() => props.onMarkerClick(marker)}
             />
         ))}
 
@@ -31,8 +32,8 @@ var lvl = 0;
 var key = 0;
 
 export default class Map extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             markers: [],
             polygon: [{
@@ -56,6 +57,7 @@ export default class Map extends React.Component {
         this.updateMap = this.updateMap.bind(this);
         this.handleMapClick = this.handleMapClick.bind(this);
         this.returnSingleDistrict = this.returnSingleDistrict.bind(this);
+        this.handleMarkerClick = this.handleMarkerClick.bind(this);
     }
 
     componentDidMount() {
@@ -208,12 +210,13 @@ export default class Map extends React.Component {
         //console.log("STATUS: "+this.context.hasMap());
         this._mapComponent.fitBounds(bounds);
 
-
-
         this.setState({
            center: center,
         });
         this.props.updateId(polygon.id);
+    }
+    handleMarkerClick(marker){
+        this.props.updateId(marker.id);
     }
     updateMap(districtId){
         this.setState({
@@ -250,7 +253,7 @@ export default class Map extends React.Component {
                     onMapLoad={this.handleMapLoad}
                     onMapClick={this.handleMapClick}
                     markers={this.state.markers}
-                    onMarkerRightClick={this.handleMarkerRightClick}
+                    onMarkerClick={this.handleMarkerClick}
                     poly = {this.state.polygon}
                     onPolyClick = {this.handlePolyClick}
                     zooming = {this.state.zoom}
