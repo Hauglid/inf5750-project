@@ -74,3 +74,13 @@ export function loadUnitInfoLvlAndfields(level, fields){
         .then(onlySuccessResponses)
         .then(response => response.json());
 }
+
+export function saveOrganisationUnit(organisationUnit) {
+    // POST the payload to the server to save the organisationUnit
+    return fetch(`${serverUrl}/organisationUnits`, Object.assign({}, fetchOptions, { method: 'POST', body: JSON.stringify(organisationUnit) }))
+        .then(onlySuccessResponses)
+        // Parse the json response
+        .then(response => response.json())
+        // Log any errors to the console. (Should probably do some better error handling);
+        .catch(error => console.error(error));
+}

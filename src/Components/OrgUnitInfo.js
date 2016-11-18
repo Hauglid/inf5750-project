@@ -1,79 +1,168 @@
 import React from 'react';
-import {loadOrganisationUnits, loadUnitInfo, searchBy} from '../api';
-import TextFields from './TextFields';
+import {saveOrganisationUnit, loadUnitInfo} from '../api';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
 export default class OrgUnitInfo extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             isSaving: false,
-            isLoading: false,
             unitInfo: [],
             editing: false,
-            items: [],
         };
-        this.switchToEdit = this.switchToEdit.bind(this);
+
+        this.editButton = this.editButton.bind(this);
+        this.saveButton = this.saveButton.bind(this);
+        this.cancelButton = this.cancelButton.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.newUnit = this.newUnit.bind(this);
     }
 
     componentDidMount() {
-        //this.loadUnitInfo();
-        this.loadInfo();
+        this.loadUnitInfo(this.props.id);
     }
 
-
-    loadInfo() {
-        console.log("loading");
-        loadOrganisationUnits().then((organisationUnits) => {
-            this.setState({
-                items:organisationUnits,
-            });
-        });
-    }
+    //
+    // loadInfo() {
+    //     console.log("loading");
+    //     loadOrganisationUnits().then((organisationUnits) => {
+    //         this.setState({
+    //             items:organisationUnits,
+    //         });
+    //     });
+    // }
 
     // loads the information about an organisation unit
-    //currently loads the same every time, should tak an id as parameter
-    loadUnitInfo() {
-        console.log("Loading unit info...");
-        loadUnitInfo("eoYV2p74eVz").then((organisationUnit) => {
+    loadUnitInfo(id) {
+        console.log("Loading unit info..." + id);
+        loadUnitInfo(id).then((organisationUnit) => {
             this.setState({
                 unitInfo: organisationUnit,
+                originalUnitInfo: organisationUnit,
             });
         });
     }
 
-    switchToEdit() {
-        this.setState({editing: !this.state.editing});
-        console.log(this.state.items);
-    }
 
-    handleChange(cat, event) {
+    handleChange(category, event) {
         var info = this.state.unitInfo;
-        info[cat] = event.target.value;
-        console.log(this.state.unitInfo[cat]);
+        info[category] = event.target.value;
         this.setState({
             unitInfo: info,
         });
     };
 
+    newUnit() {
+        console.log("New");
+        this.setState({
+            editing: true,
+            oldUnitInfo: this.state.unitInfo,
+            unitInfo: {
+                displayName: "",
+                openingDate: "",
+                coordinates: "",
+                id: ""
+            }}, function() {console.log(this.state.unitInfo);});
+
+    }
+
+    editButton() {
+        console.log("Edit");
+        this.setState({
+            editing: true,
+            oldUnitInfo: this.state.unitInfo,
+        }, function() {
+            console.log(this.state.oldUnitInfo);
+        });
+        // this.setState({
+        //     unitInfo: {
+        //         displayName: this.state.oldUnitInfo["displayName"],
+        //         openingDate: this.state.oldUnitInfo["openingDate"],
+        //         coordinates: this.state.oldUnitInfo["coordinates"],
+        //         id: this.state.oldUnitInfo["id"],
+        //     }}, function() {console.log(this.state.unitInfo)
+        // });
+    }
+
+    cancelButton() {
+        console.log("Cancel");
+        // console.log(this.state.oldUnitInfo);
+        this.setState({
+            unitInfo: this.state.oldUnitInfo,
+            editing: false,
+        }, function() {console.log(this.state.unitInfo)});
+
+    }
+
+    saveButton() {
+        console.log("Save");
+        this.setState({editing: false});
+        console.log(this.isValid());
+        this.saveUnit(this.state.unitInfo);
+
+    }
+
+    saveUnit(unit) {
+        console.log(unit);
+        saveOrganisationUnit(unit)
+            .catch(() => alert("Could not save unit"));
+    }
+
+    //returns false if valid, true if not
+    isValid() {
+        return !(
+          this.state.unitInfo["displayName"] &&
+          this.state.unitInfo["openingDate"] &&
+          this.state.unitInfo["coordinates"] &&
+          this.state.unitInfo["id"]
+        );
+    }
+
+
     render() {
 
         return (
             <div>
-                <TextField fullWidth={true} style={{fontSize: '20px', fontWeight: 'bold'}} value="Organisational Unit Information"/>
-                <RaisedButton label={this.state.editing ? "Cancel" : "Edit"} primary={true} onClick={this.switchToEdit}/>
+                <TextField fullWidth={true} style={{fontSize: '20px', fontWeight: 'bold'}} value="Unit Information"/>
+                <RaisedButton
+                    label={this.state.editing ? "Cancel" : "Edit"}
+                    onClick={this.state.editing ? this.cancelButton : this.editButton}
+                    primary={this.state.editing ? false : true}/>
+                <RaisedButton
+                    label={this.state.editing ? "Save" : "New"}
+                    primary={true}
+                    onClick={this.state.editing ? this.saveButton : this.newUnit}/>
                 <br/>
                 <div>
-                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "displayName")} underlineShow={this.state.editing} floatingLabelText="Name" value={this.props.unitInfo["displayName"]} />
+                    <TextField
+                        disabled={!this.state.editing}
+                        underlineShow={this.state.editing}
+                        floatingLabelText="Name"
+                        onChange={this.handleChange.bind(this, "displayName")}
+                        value={this.state.unitInfo["displayName"]} />
                     <br/>
-                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "openingDate")} underlineShow={this.state.editing} floatingLabelText="Opening date" value={this.props.unitInfo["openingDate"]} />
+                    <TextField
+                        disabled={!this.state.editing}
+                        onChange={this.handleChange.bind(this, "openingDate")}
+                        underlineShow={this.state.editing}
+                        floatingLabelText="Opening date"
+                        value={this.state.unitInfo["openingDate"]} />
                     <br/>
-                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "coordinates")} underlineShow={this.state.editing} floatingLabelText="Coordinates" value={this.props.unitInfo["coordinates"]} />
+                    <TextField
+                        disabled={!this.state.editing}
+                        onChange={this.handleChange.bind(this, "coordinates")}
+                        underlineShow={this.state.editing}
+                        floatingLabelText="Coordinates"
+                        value={this.state.unitInfo["coordinates"]} />
                     <br/>
-                    <TextField disabled={!this.state.editing} onChange={this.handleChange.bind(this, "id")} underlineShow={this.state.editing} floatingLabelText="ID" value={this.props.unitInfo["id"]} />
+                    <TextField
+                        disabled={!this.state.editing}
+                        onChange={this.handleChange.bind(this, "id")}
+                        underlineShow={this.state.editing}
+                        floatingLabelText="ID"
+                        value={this.state.unitInfo["id"]} />
                     <br/>
 
 
