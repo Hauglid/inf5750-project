@@ -1,6 +1,6 @@
 import React from 'react';
 import {withGoogleMap, GoogleMap, Marker, Polygon} from "react-google-maps"
-import {loadUnitInfo, loadUnitInfoLvl} from '../api'
+import {loadUnitInfo} from '../api'
 import {getDistance, findCenter, removeEveryThingBut} from './Toolbox'
 
 
@@ -46,6 +46,7 @@ export default class Map extends React.Component {
                 lat: 8.460555,
                 lng:-11.779889,
             },
+            id: 'id',
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.onLoad = this.onLoad.bind(this);
@@ -61,7 +62,9 @@ export default class Map extends React.Component {
         this.onLoad();
     }
     componentWillReceiveProps(nextProps){
-
+        if(nextProps.id != this.state.id){
+            this.updateMap(nextProps.id);
+        }
     }
 
     handleMapLoad(map) {
@@ -197,7 +200,7 @@ export default class Map extends React.Component {
 
     handlePolyClick(polygon){
         const center = findCenter(polygon.path);
-
+        /*
         if(lvl > 2){
             this.setState({
                 polygon: removeEveryThingBut(this.state.polygon, polygon.id),
@@ -213,17 +216,20 @@ export default class Map extends React.Component {
             });
             this.drawDistrict(polygon.id);
         }
+        */
         this.props.updateId(polygon.id);
     }
     updateMap(districtId){
         this.setState({
             polygon: [],
             markers: [],
+            id: districtId,
         });
 
         loadUnitInfo(districtId).then((organisationUnit => {
-            if(organisationUnit["id"] < 3){
+            if(organisationUnit["level"] < 3){
                 this.drawDistrict(districtId);
+                console.log("district ID: "+districtId);
             }else if(organisationUnit["id"] == 3){
                 this.drawDistrict(districtId);
                 this.setMarkers(districtId);
