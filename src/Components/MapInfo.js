@@ -35,6 +35,7 @@ export default class MapInfo extends React.Component {
 
         const response = searchBy("parent.id", this.state.id);
 
+        // set name
         loadUnitInfo(this.state.id)
             .then(({name}) => name)
             .then((name) => {
@@ -43,6 +44,7 @@ export default class MapInfo extends React.Component {
                 });
             });
 
+        // get list
         response.then((unit) => {
             var result = unit.map(function (a) {
                 return {
@@ -61,9 +63,9 @@ export default class MapInfo extends React.Component {
 
         return (
             <div style={{height:500}}>
-                <h2>{this.state.name}</h2>
+                <h2 style={{height: "8%"}}>{this.state.name}</h2>
                 <Divider/>
-                <List style={{height: 435 , overflowY: "scroll"}}>
+                <List style={{height: "85%" , overflowY: "scroll"}}>
                     {this.state.unitInfo.map(function (item) {
                         return (
                             <ListItem
