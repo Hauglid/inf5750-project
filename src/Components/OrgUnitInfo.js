@@ -140,7 +140,8 @@ export default class OrgUnitInfo extends React.Component {
                 <RaisedButton
                     label={this.state.editing ? "Save" : "New"}
                     primary={true}
-                    onClick={this.state.editing ? this.saveButton : this.newUnit}/>
+                    onClick={this.state.editing ? this.saveButton : this.newUnit}
+                    disabled={this.state.editing ? this.isValid() : false }/>
                 <br/>
                 <div>
                     <TextField
