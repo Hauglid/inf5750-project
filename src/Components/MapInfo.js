@@ -57,24 +57,24 @@ export default class MapInfo extends React.Component {
         })
     }
 
-
     render() {
 
         return (
-            <div style={{height: "500"}}>
+            <div style={{height:500}}>
                 <h2>{this.state.name}</h2>
                 <Divider/>
-                <List style={{height: "435" , overflowY: "scroll"}}>
+                <List style={{height: 435 , overflowY: "scroll"}}>
                     {this.state.unitInfo.map(function (item) {
                         return (
                             <ListItem
                                 key={item.id}
                                 value={item.id}
                                 primaryText={item.name}
+                                onTouchTap={() => this.props.updateId(item.id)}
                             />
                         )
 
-                    })}
+                    }, this)}
 
                 </List>
             </div>
