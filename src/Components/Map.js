@@ -21,7 +21,8 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
          {props.poly.map(polygon => (
            <Polygon
            {...polygon}
-               onClick={() => props.onPolyClick(polygon)}
+                onClick={() => props.onPolyClick(polygon)}
+                onRightClick = {() => props.onPolyRightClick(polygon)}
            />
         ))}
 
@@ -48,6 +49,7 @@ export default class Map extends React.Component {
                 lng:-11.779889,
             },
             id: 'id',
+            parentId: undefined,
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.onLoad = this.onLoad.bind(this);
@@ -59,6 +61,7 @@ export default class Map extends React.Component {
         this.returnSingleDistrict = this.returnSingleDistrict.bind(this);
         this.handleMarkerClick = this.handleMarkerClick.bind(this);
         this.updateBounds = this.updateBounds.bind(this);
+        this.handlePolyRightClick = this.handlePolyRightClick.bind(this);
     }
 
     componentDidMount() {
@@ -82,7 +85,7 @@ export default class Map extends React.Component {
         this.drawDistrict("ImspTQPwCqd")
     }
 
-    returnSingleDistrict(response,currentId){
+    returnSingleDistrict(response,currentId, parent){
         var latLng = [];
         var last = null;
         var newPoly = [];
@@ -108,6 +111,7 @@ export default class Map extends React.Component {
                             path: latLng,
                             key: key,
                             id: currentId,
+                            parent: this.state.parentId,
                         });
                         latLng = [];
                         key++;
@@ -196,11 +200,6 @@ export default class Map extends React.Component {
                         }],
                     });
                 }
-                /*
-                newMarkers.push({
-                    position: parseFloat()
-                })
-                */
             }
             for (var i = 0; i < firstResponse.length; i++) {
                 const currentId = firstResponse[i]["id"];
@@ -237,17 +236,30 @@ export default class Map extends React.Component {
             this.props.updateId(polygon.id);
         }
     }
+    handlePolyRightClick(polygon){
+        if(this.state.parentId != undefined){
+            this.props.updateId(this.state.parentId);
+        }
+    }
     handleMarkerClick(marker){
         this.props.updateId(marker.id);
     }
     updateMap(districtId){
-
         loadUnitInfo(districtId).then((organisationUnit => {
-            if(organisationUnit["level"] < 3){
+            if(organisationUnit["level"] < 2){
                 this.setState({
                     polygon: [],
                     markers: [],
                     id: districtId,
+                    parentId: undefined,
+                });
+                this.drawDistrict(districtId);
+            } else if(organisationUnit["level"] < 3){
+                this.setState({
+                    polygon: [],
+                    markers: [],
+                    id: districtId,
+                    parentId: organisationUnit["parent"]["id"],
                 });
                 this.drawDistrict(districtId);
             }else if(organisationUnit["level"] == 3){
@@ -255,6 +267,7 @@ export default class Map extends React.Component {
                     polygon: [],
                     markers: [],
                     id: districtId,
+                    parentId: organisationUnit["parent"]["id"],
                 });
                 this.drawDistrict(districtId);
                 this.setMarkers(districtId);
@@ -263,6 +276,7 @@ export default class Map extends React.Component {
                     polygon: [],
                     markers: [],
                     id: districtId,
+                    parentId: organisationUnit["parent"]["id"],
                 });
                 this.drawDistrict(organisationUnit["parent"]["id"]);
                 this.setMarkers(districtId);
@@ -276,8 +290,8 @@ export default class Map extends React.Component {
     }
 
     updateBounds(response) {
-
         if (response != undefined) {
+            console.log("HERE");
             var bounds = new google.maps.LatLngBounds();
 
             response = response.split("[");
@@ -300,6 +314,7 @@ export default class Map extends React.Component {
             });
             this._mapComponent.fitBounds(bounds);
         }else{
+            console.log("and here");
             this.setState({
                 zoom: 7,
                 center: {
@@ -326,6 +341,7 @@ export default class Map extends React.Component {
                     onMarkerClick={this.handleMarkerClick}
                     poly = {this.state.polygon}
                     onPolyClick = {this.handlePolyClick}
+                    onPolyRightClick = {this.handlePolyRightClick}
                     zooming = {this.state.zoom}
                     center = {this.state.center}
 
