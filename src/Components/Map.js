@@ -43,7 +43,7 @@ export default class Map extends React.Component {
                 key: 'key',
                 id: 'id',
             }],
-            zoom: 7,
+            zoom: undefined,
             center: {
                 lat: 8.460555,
                 lng:-11.779889,
@@ -315,6 +315,7 @@ export default class Map extends React.Component {
             this._mapComponent.fitBounds(bounds);
         }else{
             console.log("and here");
+
             this.setState({
                 zoom: 7,
                 center: {
