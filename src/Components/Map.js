@@ -31,6 +31,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
 
 var lvl = 0;
 var key = 0;
+var sierraBounds = undefined;
 
 export default class Map extends React.Component {
     constructor(props) {
@@ -82,7 +83,7 @@ export default class Map extends React.Component {
 
     onLoad(){
         //default is sierra Leone id
-        this.drawDistrict("ImspTQPwCqd")
+        this.drawDistrict("ImspTQPwCqd");
     }
 
     returnSingleDistrict(response,currentId, parent){
@@ -314,15 +315,22 @@ export default class Map extends React.Component {
             });
             this._mapComponent.fitBounds(bounds);
         }else{
+
             console.log("and here");
 
             this.setState({
-                zoom: 7,
+                zoom: 8,
                 center: {
                     lat: 8.460555,
                     lng:-11.779889,
                 },
-            })
+            });
+
+            if(sierraBounds == undefined){
+                sierraBounds = this._mapComponent.getBounds();
+            }
+
+            this._mapComponent.fitBounds(sierraBounds);
         }
     }
 
