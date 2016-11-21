@@ -127,6 +127,15 @@ export default class OrgUnitInfo extends React.Component {
         }
     }
 
+    saveTester() {
+        console.log("tester");
+        var a = {
+            "name": "PI",
+            "value": "3.14159265359"
+        };
+
+    }
+
 
     render() {
 
@@ -176,7 +185,10 @@ export default class OrgUnitInfo extends React.Component {
                         floatingLabelText="ID"
                         value={this.state.unitInfo["id"]} />
                     <br/>
-
+                    <RaisedButton
+                        label={"tester"}
+                        onClick={this.saveTester}
+                        primary={this.state.editing ? false : true}/>
 
                 </div>
             </div>
