@@ -1,3 +1,11 @@
 {
-    "presets": [["es2015", { "module": false }], "react"]
+  "presets": [
+    [
+      "es2015",
+      {
+        "module": false
+      }
+    ],
+    "react"
+  ]
 }

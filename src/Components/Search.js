@@ -44,6 +44,7 @@ export default class Search extends React.Component {
                         dataSource: result,
                         inputId: organisationUnit[0].id
                     });
+
                 }
             })
         }
@@ -55,7 +56,22 @@ export default class Search extends React.Component {
     }
 
     onNewRequest(inputValue) {
-        this.onUpdateInput(inputValue);
+        const self = this;
+
+        this.setState({
+            inputValue: inputValue.trim()
+        }, function () {
+            searchBy("name", this.state.inputValue)
+                .then((unit) => {
+                    this.setState({
+                        inputId: unit[0].id,
+                    }, self.onTouchTap);
+                });
+            ;
+
+
+        });
+
     }
 
     render() {

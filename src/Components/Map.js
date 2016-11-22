@@ -167,6 +167,7 @@ export default class Map extends React.Component {
             }
         }));
     }
+
     //works for lvl4
     setMarkers(districtId) {
         var key = 0;
@@ -174,6 +175,33 @@ export default class Map extends React.Component {
         loadUnitInfo(districtId).then((organisationUnit => {
             var firstResponse = organisationUnit["children"];
 
+            if(organisationUnit["level"] == 4){
+                if(organisationUnit["coordinates"] != undefined){
+                    var coordinates = organisationUnit["coordinates"];
+                    coordinates = coordinates.split(",");
+                    coordinates = coordinates.map(function(a){
+                        var ret = a.replace("[","");
+                        ret = ret.replace("]","");
+                        return ret;
+                    });
+
+                    this.setState({
+                        markers: [{
+                            position: {
+                                lat: parseFloat(coordinates[1]),
+                                lng: parseFloat(coordinates[0]),
+                            },
+                            key: key,
+                            id: organisationUnit["id"],
+                        }],
+                    });
+                }
+                /*
+                newMarkers.push({
+                    position: parseFloat()
+                })
+                */
+            }
             for (var i = 0; i < firstResponse.length; i++) {
                 const currentId = firstResponse[i]["id"];
                 loadUnitInfo(currentId).then((metadata => {
@@ -205,7 +233,9 @@ export default class Map extends React.Component {
     }
 
     handlePolyClick(polygon){
-        this.props.updateId(polygon.id);
+        if(polygon.id != undefined) {
+            this.props.updateId(polygon.id);
+        }
     }
     handleMarkerClick(marker){
         this.props.updateId(marker.id);
@@ -227,6 +257,14 @@ export default class Map extends React.Component {
                     id: districtId,
                 });
                 this.drawDistrict(districtId);
+                this.setMarkers(districtId);
+            }else{
+                this.setState({
+                    polygon: [],
+                    markers: [],
+                    id: districtId,
+                });
+                this.drawDistrict(organisationUnit["parent"]["id"]);
                 this.setMarkers(districtId);
             }
         }));

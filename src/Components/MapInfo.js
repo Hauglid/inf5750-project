@@ -1,6 +1,7 @@
 import React from 'react';
-import {searchBy} from '../api';
+import {searchBy, loadUnitInfo} from '../api';
 import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
 
 export default class MapInfo extends React.Component {
 
@@ -10,6 +11,8 @@ export default class MapInfo extends React.Component {
         this.state = {
             unitInfo: [],
             id: props.id,
+            nameParent: "",
+
         };
         this.load = this.load.bind(this);
     }
@@ -17,11 +20,12 @@ export default class MapInfo extends React.Component {
     componentDidMount() {
         this.load();
     }
-    componentWillReceiveProps(nextProps){
-        if(nextProps.id != this.state.id){
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.id != this.state.id) {
             this.setState({
                 id: nextProps.id,
-            }, function (){
+            }, function () {
                 this.load();
             });
         }
@@ -30,6 +34,17 @@ export default class MapInfo extends React.Component {
     load() {
 
         const response = searchBy("parent.id", this.state.id);
+
+        // set name
+        loadUnitInfo(this.state.id)
+            .then(({name}) => name)
+            .then((name) => {
+                this.setState({
+                    name: name,
+                });
+            });
+
+        // get list
         response.then((unit) => {
             var result = unit.map(function (a) {
                 return {
@@ -44,23 +59,27 @@ export default class MapInfo extends React.Component {
         })
     }
 
-
     render() {
 
         return (
-            <List style={{height: 500, overflowY: "scroll"}}>
-                {this.state.unitInfo.map(function (item) {
-                    return (
-                        <ListItem
-                            key={item.id}
-                            value={item.id}
-                            primaryText={item.name}
-                        />
-                    )
+            <div style={{height:500}}>
+                <h2 style={{height: "8%"}}>{this.state.name}</h2>
+                <Divider/>
+                <List style={{height: "85%" , overflowY: "scroll"}}>
+                    {this.state.unitInfo.map(function (item) {
+                        return (
+                            <ListItem
+                                key={item.id}
+                                value={item.id}
+                                primaryText={item.name}
+                                onTouchTap={() => this.props.updateId(item.id)}
+                            />
+                        )
 
-                })}
+                    }, this)}
 
-            </List>
+                </List>
+            </div>
         );
     }
 }
