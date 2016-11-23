@@ -18,6 +18,7 @@ export default class OrgUnitInfo extends React.Component {
         this.cancelButton = this.cancelButton.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.newUnit = this.newUnit.bind(this);
+        this.saveUnit = this.saveUnit.bind(this);
     }
 
     componentDidMount() {
@@ -58,7 +59,6 @@ export default class OrgUnitInfo extends React.Component {
         console.log("New");
         this.setState({
             editing: true,
-            oldUnitInfo: this.state.unitInfo,
             unitInfo: {
                 displayName: "",
                 openingDate: "",
@@ -112,8 +112,7 @@ export default class OrgUnitInfo extends React.Component {
         return !(
           this.state.unitInfo["displayName"] &&
           this.state.unitInfo["openingDate"] &&
-          this.state.unitInfo["coordinates"] &&
-          this.state.unitInfo["id"]
+          this.state.unitInfo["coordinates"]
         );
     }
 
@@ -128,12 +127,19 @@ export default class OrgUnitInfo extends React.Component {
     }
 
     saveTester() {
-        console.log("tester");
-        var a = {
-            "name": "PI",
-            "value": "3.14159265359"
-        };
+        console.log("saveTester");
 
+        var a = {
+                    parent:{
+                        "id":"QywkxFudXrC"
+                    },
+                    openingDate: this.state.unitInfo["openingDate"],
+                    name: this.state.unitInfo["displayName"],
+                    shortName: this.state.unitInfo["displayName"],
+                    coordinates: this.state.unitInfo["coordinates"]
+                };
+
+        this.saveUnit(a);
     }
 
 
@@ -187,7 +193,7 @@ export default class OrgUnitInfo extends React.Component {
                     <br/>
                     <RaisedButton
                         label={"tester"}
-                        onClick={this.saveTester}
+                        onClick={this.saveTester.bind(this)}
                         primary={this.state.editing ? false : true}/>
 
                 </div>
