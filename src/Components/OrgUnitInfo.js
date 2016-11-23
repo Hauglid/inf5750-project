@@ -48,11 +48,13 @@ export default class OrgUnitInfo extends React.Component {
 
 
     handleChange(category, event) {
-        var info = this.state.unitInfo;
-        info[category] = event.target.value;
-        this.setState({
-            unitInfo: info,
-        });
+        if (this.state.editing) {
+            var info = this.state.unitInfo;
+            info[category] = event.target.value;
+            this.setState({
+                unitInfo: info,
+            });
+        }
     };
 
     newUnit() {
@@ -143,6 +145,7 @@ export default class OrgUnitInfo extends React.Component {
     }
 
 
+
     render() {
 
         return (
@@ -151,7 +154,7 @@ export default class OrgUnitInfo extends React.Component {
                 <RaisedButton
                     label={this.state.editing ? "Cancel" : "Edit"}
                     onClick={this.state.editing ? this.cancelButton : this.editButton}
-                    primary={this.state.editing ? false : true}/>
+                    primary={!this.state.editing}/>
                 <RaisedButton
                     label={this.state.editing ? "Save" : "New"}
                     primary={true}
@@ -160,7 +163,6 @@ export default class OrgUnitInfo extends React.Component {
                 <br/>
                 <div>
                     <TextField
-                        disabled={!this.state.editing}
                         floatingLabelFixed={true}
                         underlineShow={this.state.editing}
                         floatingLabelText="Name"
@@ -168,7 +170,6 @@ export default class OrgUnitInfo extends React.Component {
                         value={this.state.unitInfo["displayName"]} />
                     <br/>
                     <TextField
-                        disabled={!this.state.editing}
                         floatingLabelFixed={true}
                         onChange={this.handleChange.bind(this, "openingDate")}
                         underlineShow={this.state.editing}
@@ -176,7 +177,6 @@ export default class OrgUnitInfo extends React.Component {
                         value={this.state.unitInfo["openingDate"]} />
                     <br/>
                     <TextField
-                        disabled={!this.state.editing}
                         floatingLabelFixed={true}
                         onChange={this.handleChange.bind(this, "coordinates")}
                         underlineShow={this.state.editing}
@@ -184,7 +184,6 @@ export default class OrgUnitInfo extends React.Component {
                         value={this.state.unitInfo["coordinates"]} />
                     <br/>
                     <TextField
-                        disabled={!this.state.editing}
                         floatingLabelFixed={true}
                         onChange={this.handleChange.bind(this, "id")}
                         underlineShow={this.state.editing}
@@ -194,7 +193,7 @@ export default class OrgUnitInfo extends React.Component {
                     <RaisedButton
                         label={"tester"}
                         onClick={this.saveTester.bind(this)}
-                        primary={this.state.editing ? false : true}/>
+                        primary={!this.state.editing}/>
 
                 </div>
             </div>
