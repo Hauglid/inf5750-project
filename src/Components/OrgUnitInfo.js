@@ -1,7 +1,9 @@
 import React from 'react';
-import {saveOrganisationUnit, loadUnitInfo} from '../api';
+import {loadOrganisationUnits, saveOrganisationUnit, loadUnitInfo} from '../api';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 export default class OrgUnitInfo extends React.Component {
     constructor(props) {
@@ -10,6 +12,7 @@ export default class OrgUnitInfo extends React.Component {
         this.state = {
             isSaving: false,
             unitInfo: [],
+            allUnits: [],
             editing: false,
         };
 
@@ -23,6 +26,19 @@ export default class OrgUnitInfo extends React.Component {
 
     componentDidMount() {
         this.loadUnitInfo(this.props.id);
+        this.loadAllUnits();
+    }
+
+    loadAllUnits() {
+        // Loads the organisation units from the api and sets the loading state to false and puts the items onto the component state.
+        loadOrganisationUnits(2)
+            .then((organisationUnits) => {
+                console.log(organisationUnits);
+                this.setState({
+                    isLoading: false,
+                    allUnits: organisationUnits,
+                });
+            });
     }
 
     //
@@ -61,6 +77,7 @@ export default class OrgUnitInfo extends React.Component {
         console.log("New");
         this.setState({
             editing: true,
+            new: true,
             unitInfo: {
                 displayName: "",
                 openingDate: "",
@@ -98,8 +115,20 @@ export default class OrgUnitInfo extends React.Component {
     saveButton() {
         console.log("Save");
         this.setState({editing: false});
-        console.log(this.isValid());
-        this.saveUnit(this.state.unitInfo);
+
+        if (this.state.new) {
+            var a = {
+                parent:{
+                    "id":"QywkxFudXrC"
+                },
+                openingDate: this.state.unitInfo["openingDate"],
+                name: this.state.unitInfo["displayName"],
+                shortName: this.state.unitInfo["displayName"],
+                coordinates: this.state.unitInfo["coordinates"]
+            };
+            this.saveUnit(a);
+        }
+
 
     }
 
@@ -113,8 +142,8 @@ export default class OrgUnitInfo extends React.Component {
     isValid() {
         return !(
           this.state.unitInfo["displayName"] &&
-          this.state.unitInfo["openingDate"] &&
-          this.state.unitInfo["coordinates"]
+          this.state.unitInfo["openingDate"]
+          // this.state.unitInfo["coordinates"]
         );
     }
 
@@ -131,19 +160,19 @@ export default class OrgUnitInfo extends React.Component {
     saveTester() {
         console.log("saveTester");
 
-        var a = {
-                    parent:{
-                        "id":"QywkxFudXrC"
-                    },
-                    openingDate: this.state.unitInfo["openingDate"],
-                    name: this.state.unitInfo["displayName"],
-                    shortName: this.state.unitInfo["displayName"],
-                    coordinates: this.state.unitInfo["coordinates"]
-                };
+        const a = this.state.allUnits
+            .map(item => {
+                return (
+                    <MenuItem key={item.id} value={item.id} primaryText={item.displayName}/>
+                );
+            });
 
-        this.saveUnit(a);
+        this.setState({
+            allUnits: a
+        });
+        console.log(this.state.allUnits);
+        console.log(a);
     }
-
 
 
     render() {
@@ -190,6 +219,11 @@ export default class OrgUnitInfo extends React.Component {
                         floatingLabelText="ID"
                         value={this.state.unitInfo["id"]} />
                     <br/>
+                    <SelectField
+                        floatingLabelText="District"
+                    >
+                        {this.state.allUnits}
+                    </SelectField>
                     <RaisedButton
                         label={"tester"}
                         onClick={this.saveTester.bind(this)}

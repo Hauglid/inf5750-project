@@ -31,9 +31,9 @@ function onlySuccessResponses(response) {
     return Promise.reject(response);
 }
 
-export function loadOrganisationUnits() {
+export function loadOrganisationUnits(level) {
     // Load the organisation units but only the first level and the do not use paging
-    return fetch(`${serverUrl}/organisationUnits?paging=false&level=1`, fetchOptions)
+    return fetch(`${serverUrl}/organisationUnits?paging=false&level=${level}`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         // pick the organisationUnits property from the payload
