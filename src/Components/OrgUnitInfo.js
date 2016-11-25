@@ -10,7 +10,6 @@ export default class OrgUnitInfo extends React.Component {
         super(props);
 
         this.state = {
-            isSaving: false,
             unitInfo: [],
             allUnits: [],
             editing: false,
@@ -20,26 +19,16 @@ export default class OrgUnitInfo extends React.Component {
         this.saveButton = this.saveButton.bind(this);
         this.cancelButton = this.cancelButton.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.newUnit = this.newUnit.bind(this);
         this.saveUnit = this.saveUnit.bind(this);
     }
 
     componentDidMount() {
+        this.getDistricts();
         this.loadUnitInfo(this.props.id);
-        this.loadAllUnits();
     }
 
-    loadAllUnits() {
-        // Loads the organisation units from the api and sets the loading state to false and puts the items onto the component state.
-        loadOrganisationUnits(2)
-            .then((organisationUnits) => {
-                console.log(organisationUnits);
-                this.setState({
-                    isLoading: false,
-                    allUnits: organisationUnits,
-                });
-            });
-    }
 
     //
     // loadInfo() {
@@ -86,7 +75,6 @@ export default class OrgUnitInfo extends React.Component {
             }}
             //, function() {console.log(this.state.unitInfo);}
         );
-
     }
 
     editButton() {
@@ -119,7 +107,7 @@ export default class OrgUnitInfo extends React.Component {
         if (this.state.new) {
             var a = {
                 parent:{
-                    "id":"QywkxFudXrC"
+                    "id":this.state.district
                 },
                 openingDate: this.state.unitInfo["openingDate"],
                 name: this.state.unitInfo["displayName"],
@@ -128,8 +116,6 @@ export default class OrgUnitInfo extends React.Component {
             };
             this.saveUnit(a);
         }
-
-
     }
 
     saveUnit(unit) {
@@ -159,21 +145,33 @@ export default class OrgUnitInfo extends React.Component {
 
     saveTester() {
         console.log("saveTester");
+        console.log(this.state.district);
 
-        const a = this.state.allUnits
-            .map(item => {
-                return (
-                    <MenuItem key={item.id} value={item.id} primaryText={item.displayName}/>
-                );
-            });
-
-        this.setState({
-            allUnits: a
-        });
-        console.log(this.state.allUnits);
-        console.log(a);
     }
 
+    handleSelectChange(event, index, district) {
+        this.setState({district: district});
+    }
+
+    getDistricts() {
+        console.log("getDistricts");
+        var districts = [];
+        loadOrganisationUnits(2)
+            .then((organisationUnits) => {
+                districts = organisationUnits
+                    .map(item => {
+                        return (
+                            <MenuItem key={item.id} value={item.id} primaryText={item.displayName}/>
+                        );
+                    });
+            })
+            .then(() => {
+                this.setState({
+                    allUnits: districts
+                });
+
+            });
+    }
 
     render() {
 
@@ -221,6 +219,8 @@ export default class OrgUnitInfo extends React.Component {
                     <br/>
                     <SelectField
                         floatingLabelText="District"
+                        onChange={this.handleSelectChange.bind(this)}
+                        value={this.state.district}
                     >
                         {this.state.allUnits}
                     </SelectField>
