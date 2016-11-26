@@ -69,6 +69,7 @@ export default class Map extends React.Component {
             id: 'id',
             parentId: undefined,
             makeNew: false,
+            open: false,
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.onLoad = this.onLoad.bind(this);
@@ -213,41 +214,19 @@ export default class Map extends React.Component {
 
     //works for lvl4
     setMarkers(districtId, blueId) {
+        this.setState({
+            open: false,
+        });
         var newMarkers = [];
         loadUnitInfo(districtId).then((organisationUnit => {
             var firstResponse = organisationUnit["children"];
 
-            /*
-            if(organisationUnit["level"] == 4){
-                if(organisationUnit["coordinates"] != undefined){
-                    var coordinates = organisationUnit["coordinates"];
-                    coordinates = coordinates.split(",");
-                    coordinates = coordinates.map(function(a){
-                        var ret = a.replace("[","");
-                        ret = ret.replace("]","");
-                        return ret;
-                    });
-
-                    this.setState({
-                        markers: [{
-                            position: {
-                                lat: parseFloat(coordinates[1]),
-                                lng: parseFloat(coordinates[0]),
-                            },
-                            icon: icon,
-                            key: key,
-                            id: organisationUnit["id"],
-                        }],
-                    });
-                    key++;
-                }
-            }
-            */
             for (var i = 0; i < firstResponse.length; i++) {
                 const currentId = firstResponse[i]["id"];
                 loadUnitInfo(currentId).then((metadata => {
                     var coordinates = metadata["coordinates"];
                     if(coordinates != undefined){
+
                         coordinates = coordinates.split(",");
 
                         coordinates = coordinates.map(function(a){
@@ -278,6 +257,12 @@ export default class Map extends React.Component {
                             });
                         }
                         key++;
+                    }else {
+                        if (blueId == currentId) {
+                            this.setState({
+                                open: true,
+                            });
+                        }
                     }
                     this.setState({
                         markers: newMarkers,
@@ -474,9 +459,8 @@ export default class Map extends React.Component {
                 />
                 <Snackbar
                     open={this.state.open}
-                    message="Event added to your calendar"
+                    message="Coordinates not found"
                     autoHideDuration={4000}
-                    onRequestClose={this.handleRequestClose}
                 />
             </div>
         );
