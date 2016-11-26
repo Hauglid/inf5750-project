@@ -20,8 +20,6 @@ export default class Body extends React.Component {
     updateId(id){
         this.setState({
             id: id,
-        }, function(){
-            console.log(this.state.id);
         });
     }
 
@@ -30,7 +28,6 @@ export default class Body extends React.Component {
         this.setState({
             makeNewCoords: string,
         });
-        console.log("make new coords: "+string);
     }
     setMakeNew(bool){
         this.setState({

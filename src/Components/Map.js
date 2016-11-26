@@ -39,6 +39,9 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
 var lvl = 0;
 var key = 0;
 var sierraBounds = undefined;
+const icon = 'icon.png';
+const greenIcon = 'icon_green.png';
+const blueIcon = 'icon_blue.png';
 
 export default class Map extends React.Component {
     constructor(props) {
@@ -92,6 +95,18 @@ export default class Map extends React.Component {
             this.setState({
                 makeNew: true,
             });
+        }
+        if(nextProps.makeNew == false && nextProps.makeNew != this.state.makeNew){
+            this.setState({
+                makeNew: false,
+            });
+            var arr = this.state.markers;
+            if(arr[arr.length -1].id == undefined){
+                arr.pop();
+                this.setState({
+                    markers: arr,
+                });
+            }
         }
 
     }
@@ -217,6 +232,7 @@ export default class Map extends React.Component {
                                 lat: parseFloat(coordinates[1]),
                                 lng: parseFloat(coordinates[0]),
                             },
+                            icon: icon,
                             key: key,
                             id: organisationUnit["id"],
                         }],
@@ -241,6 +257,7 @@ export default class Map extends React.Component {
                                 lat: parseFloat(coordinates[1]),
                                 lng: parseFloat(coordinates[0]),
                             },
+                            icon: icon,
                             key: key,
                             id: currentId,
                         });
@@ -284,7 +301,6 @@ export default class Map extends React.Component {
                     id: this.state.id,
                 }],
             });
-            console.log(this.state.polyline);
             key++;
         }));
     }
@@ -347,9 +363,28 @@ export default class Map extends React.Component {
     }
 
     handleMapClick(event){
-        console.log("map is clicked");
         if(this.state.makeNew == true){
             this.props.setNewCoords(event.latLng.lat(),event.latLng.lng());
+
+            var arr = this.state.markers;
+
+            if(arr[arr.length -1].id == undefined){
+                arr.pop();
+            }
+            arr.push({
+                position: {
+                    lat: event.latLng.lat(),
+                    lng: event.latLng.lng(),
+                },
+                icon: greenIcon,
+                key: key,
+                id: undefined,
+            });
+            key++;
+
+            this.setState({
+                markers: arr,
+            });
         }
     }
     handleMapRightClick(){
