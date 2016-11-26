@@ -244,10 +244,7 @@ export default class Map extends React.Component {
             this.props.updateId(polygon.id);
         }
         if(this.state.makeNew == true){
-            this.props.setMakeNew({
-                lat: 10,
-                lng: 10,
-            });
+            this.props.setNewCoords(10, 10);
         }
         console.log(event.latLng);
     }

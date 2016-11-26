@@ -146,6 +146,7 @@ export default class OrgUnitInfo extends React.Component {
             });
         }
         if(nextProps.makeNewCoords != this.state.unitInfo["coordinates"]) {
+            console.log(nextProps);
             this.setState({
                 unitInfo: {
                     coordinates: nextProps.makeNewCoords
