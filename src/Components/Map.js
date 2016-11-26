@@ -10,6 +10,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
         zoom={props.zooming}
         center={props.center}
         onClick={props.onMapClick}
+        onRightClick ={props.onMapRightClick}
     >
         {props.markers.map(marker => (
             <Marker
@@ -77,6 +78,7 @@ export default class Map extends React.Component {
         this.updateBounds = this.updateBounds.bind(this);
         this.handlePolyRightClick = this.handlePolyRightClick.bind(this);
         this.drawPolyLine = this.drawPolyLine.bind(this);
+        this.handleMapRightClick = this.handleMapRightClick.bind(this);
     }
 
     componentDidMount() {
@@ -350,6 +352,11 @@ export default class Map extends React.Component {
             this.props.setNewCoords(event.latLng.lat(),event.latLng.lng());
         }
     }
+    handleMapRightClick(){
+        if(this.state.parentId != undefined){
+            this.props.updateId(this.state.parentId);
+        }
+    }
 
     updateBounds(response) {
         if (response != undefined) {
@@ -403,6 +410,7 @@ export default class Map extends React.Component {
                     }
                     onMapLoad={this.handleMapLoad}
                     onMapClick={this.handleMapClick}
+                    onMapRightClick={this.handleMapRightClick}
                     markers={this.state.markers}
                     onMarkerClick={this.handleMarkerClick}
                     polygon = {this.state.polygon}
