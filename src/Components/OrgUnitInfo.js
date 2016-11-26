@@ -1,5 +1,5 @@
 import React from 'react';
-import {loadOrganisationUnits, saveOrganisationUnit, loadUnitInfo} from '../api';
+import {updateOrganisationUnit, loadOrganisationUnits, saveOrganisationUnit, loadUnitInfo} from '../api';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
@@ -22,6 +22,7 @@ export default class OrgUnitInfo extends React.Component {
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.newUnit = this.newUnit.bind(this);
         this.saveUnit = this.saveUnit.bind(this);
+        this.updateUnit = this.updateUnit.bind(this);
     }
 
     componentDidMount() {
@@ -70,7 +71,7 @@ export default class OrgUnitInfo extends React.Component {
             editing: true,
             new: true,
             unitInfo: {
-                displayName: "",
+                displayName: "1",
                 openingDate: "",
                 coordinates: "",
                 id: ""
@@ -78,12 +79,10 @@ export default class OrgUnitInfo extends React.Component {
             //, function() {console.log(this.state.unitInfo);}
         );
     }
-
     editButton() {
         console.log("Edit");
         this.setState({
             editing: true,
-            oldUnitInfo: this.state.unitInfo,
         }
         //, function() {console.log(this.state.oldUnitInfo);}
         );
@@ -128,6 +127,12 @@ export default class OrgUnitInfo extends React.Component {
             .catch(() => alert("Could not save unit"));
     }
 
+    updateUnit(unit) {
+        console.log(unit);
+        updateOrganisationUnit(unit)
+            .catch(() => alert("Could not save unit"));
+    }
+
     //returns false if valid, true if not
     isValid() {
         return !(
@@ -157,9 +162,20 @@ export default class OrgUnitInfo extends React.Component {
 
     saveTester() {
         console.log("saveTester");
-        console.log(this.state.district);
-        console.log(this.state.unitInfo["parent"]["id"]);
-        console.log(this.state.unitInfo["level"]);
+        //console.log(this.state.district);
+        //console.log(this.state.unitInfo["parent"]["id"]);
+        //console.log(this.state.unitInfo["level"]);
+
+        var a = {
+            id: "nq7F0t1Pz6t",
+            openingDate: "1970-01-01T00:00:00.000",
+            name: "Arab Clinic",
+            shortName: "Arab Clinic",
+            coordinates: "[-13.221,8.4832]"
+        };
+        console.log(a);
+        this.updateUnit(a);
+
 
 
     }

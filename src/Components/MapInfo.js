@@ -52,9 +52,12 @@ export default class MapInfo extends React.Component {
                     id: a.id
                 }
             });
-            this.setState({
-                unitInfo: result,
-            });
+            if(result.length > 0){
+                this.setState({
+                    unitInfo: result,
+                });
+
+            }
 
         })
     }
