@@ -1,5 +1,5 @@
 import React from 'react';
-import {withGoogleMap, GoogleMap, Marker, Polygon} from "react-google-maps"
+import {withGoogleMap, GoogleMap, Marker, Polygon, Polyline} from "react-google-maps"
 import {loadUnitInfo} from '../api'
 import {getDistance, findCenter} from './Toolbox'
 
@@ -18,12 +18,18 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
             />
         ))}
 
-         {props.poly.map(polygon => (
+         {props.polygon.map(polygon => (
            <Polygon
            {...polygon}
-                onClick={() => props.onPolyClick(event, polygon)}
+                onClick={() => props.onPolyClick(polygon)}
                 onRightClick = {() => props.onPolyRightClick(polygon)}
            />
+        ))}
+
+        {props.polyline.map(polyline => (
+            <Polyline
+                {...polyline}
+            />
         ))}
 
     </GoogleMap>
@@ -39,6 +45,12 @@ export default class Map extends React.Component {
         this.state = {
             markers: [],
             polygon: [{
+                strokeColor: "#000",
+                path: [],
+                key: 'key',
+                id: 'id',
+            }],
+            polyline: [{
                 strokeColor: "#000",
                 path: [],
                 key: 'key',
@@ -64,6 +76,7 @@ export default class Map extends React.Component {
         this.handleMarkerClick = this.handleMarkerClick.bind(this);
         this.updateBounds = this.updateBounds.bind(this);
         this.handlePolyRightClick = this.handlePolyRightClick.bind(this);
+        this.drawPolyLine = this.drawPolyLine.bind(this);
     }
 
     componentDidMount() {
@@ -182,7 +195,6 @@ export default class Map extends React.Component {
 
     //works for lvl4
     setMarkers(districtId) {
-        var key = 0;
         var newMarkers = [];
         loadUnitInfo(districtId).then((organisationUnit => {
             var firstResponse = organisationUnit["children"];
@@ -207,6 +219,7 @@ export default class Map extends React.Component {
                             id: organisationUnit["id"],
                         }],
                     });
+                    key++;
                 }
             }
             for (var i = 0; i < firstResponse.length; i++) {
@@ -239,17 +252,45 @@ export default class Map extends React.Component {
         }));
     }
 
-    handlePolyClick(event, polygon){
+    drawPolyLine(districtId){
+        var path = [];
+        loadUnitInfo(districtId).then((organisationUnit => {
+            var response = organisationUnit["coordinates"];
+
+            this.updateBounds(response);
+
+            response = response.split("[");
+            for(var i = 0; i < response.length; i++) {
+
+                if (response[i] != "") {
+                    response[i] = response[i].replace("],", "");
+                    response[i] = response[i].replace("]]]]", "");
+                    response[i] = response[i].split(",");
+
+                    var  newCord = {
+                        lat: parseFloat(response[i][1]),
+                        lng: parseFloat(response[i][0]),
+                    };
+                    path.push(newCord);
+                }
+            }
+            this.setState({
+                polyline: [{
+                    strokeColor: "#000",
+                    path: path,
+                    key: key,
+                    id: this.state.id,
+                }],
+            });
+            console.log(this.state.polyline);
+            key++;
+        }));
+    }
+
+    handlePolyClick(polygon){
         if(polygon.id != undefined) {
             this.props.updateId(polygon.id);
         }
-        if(this.state.makeNew == true){
-            this.props.setMakeNew({
-                lat: 10,
-                lng: 10,
-            });
-        }
-        console.log(event.latLng);
     }
     handlePolyRightClick(polygon){
         if(this.state.parentId != undefined){
@@ -264,6 +305,7 @@ export default class Map extends React.Component {
             if(organisationUnit["level"] < 2){
                 this.setState({
                     polygon: [],
+                    polyline: [],
                     markers: [],
                     id: districtId,
                     parentId: undefined,
@@ -273,6 +315,7 @@ export default class Map extends React.Component {
                 this.setState({
                     polygon: [],
                     markers: [],
+                    polyline: [],
                     id: districtId,
                     parentId: organisationUnit["parent"]["id"],
                 });
@@ -281,19 +324,21 @@ export default class Map extends React.Component {
                 this.setState({
                     polygon: [],
                     markers: [],
+                    polyline: [],
                     id: districtId,
                     parentId: organisationUnit["parent"]["id"],
                 });
-                this.drawDistrict(districtId);
+                this.drawPolyLine(districtId);
                 this.setMarkers(districtId);
             }else{
                 this.setState({
                     polygon: [],
                     markers: [],
+                    polyline: [],
                     id: districtId,
                     parentId: organisationUnit["parent"]["id"],
                 });
-                this.drawDistrict(organisationUnit["parent"]["id"]);
+                this.drawPolyLine(organisationUnit["parent"]["id"]);
                 this.setMarkers(districtId);
             }
         }));
@@ -301,7 +346,9 @@ export default class Map extends React.Component {
 
     handleMapClick(event){
         console.log("map is clicked");
-        //this.updateMap("ObV5AR1NECl");
+        if(this.state.makeNew == true){
+            this.props.setNewCoords(event.latLng.lat(),event.latLng.lng());
+        }
     }
 
     updateBounds(response) {
@@ -358,7 +405,8 @@ export default class Map extends React.Component {
                     onMapClick={this.handleMapClick}
                     markers={this.state.markers}
                     onMarkerClick={this.handleMarkerClick}
-                    poly = {this.state.polygon}
+                    polygon = {this.state.polygon}
+                    polyline = {this.state.polyline}
                     onPolyClick = {this.handlePolyClick}
                     onPolyRightClick = {this.handlePolyRightClick}
                     zooming = {this.state.zoom}

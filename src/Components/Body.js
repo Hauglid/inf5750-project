@@ -14,10 +14,7 @@ export default class Body extends React.Component {
         this.state = {
             id: "ImspTQPwCqd",
             makeNew: false,
-            makeNewCoords: {
-                lat: undefined,
-                lng: undefined,
-            },
+            makeNewCoords: undefined,
         };
     }
     updateId(id){
@@ -29,12 +26,11 @@ export default class Body extends React.Component {
     }
 
     setNewCoords(lat, lng){
+        var string = "["+lat+","+lng+"]";
         this.setState({
-            makeNewCoords:{
-                lat: lat,
-                lng: lng,
-            },
+            makeNewCoords: string,
         });
+        console.log("make new coords: "+string);
     }
     setMakeNew(bool){
         this.setState({
