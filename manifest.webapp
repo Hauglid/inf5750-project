@@ -1,18 +1,20 @@
 {
-    "version": "1",
-    "name": "Health Facility Registry",
-    "description": "DHIS2 Map Facility App",
-    "launch_path": "www/index.html",
-    "icons": {
-        "48": "icon.png"
-    },
-    "developer": {
-        "name": "Krister Bakken / Karl Thomas Hauglid / Jostein Hellerud",
-    },
-    "default_locale": "en",
-    "activities": {
-        "dhis": {
-            "href": "*",
-        }
+  "version": "1",
+  "name": "Health Facility Registry",
+  "description": "DHIS2 Map Facility App",
+  "launch_path": "www/index.html",
+  "icons": {
+    "48": "icon.png"
+  },
+  "developer": {
+    "name": "Krister Bakken / Karl Thomas Hauglid / Jostein Hellerud"
+  },
+  "default_locale": "en",
+  "activities": {
+    "dhis": {
+      "href": "*",
+      "auth": "admin:district",
+      "devHref": "http://localhost:8080"
     }
+  }
 }
