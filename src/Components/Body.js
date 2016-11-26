@@ -13,6 +13,11 @@ export default class Body extends React.Component {
 
         this.state = {
             id: "ImspTQPwCqd",
+            makeNew: false,
+            makeNewCoords: {
+                lat: undefined,
+                lng: undefined,
+            },
         };
     }
     updateId(id){
@@ -20,6 +25,20 @@ export default class Body extends React.Component {
             id: id,
         }, function(){
             console.log(this.state.id);
+        });
+    }
+
+    setNewCoords(lat, lng){
+        this.setState({
+            makeNewCoords:{
+                lat: lat,
+                lng: lng,
+            },
+        });
+    }
+    setMakeNew(bool){
+        this.setState({
+            makeNew: bool,
         });
     }
 
@@ -41,10 +60,10 @@ export default class Body extends React.Component {
                         <MapInfo updateId={this.updateId.bind(this)} id={this.state.id}/>
                     </Paper>
                     <Paper zDepth={3} style={{margin: "0px 5px", height: 520, width: "53%"}}>
-                        <Map updateId={this.updateId.bind(this)} id={this.state.id}/>
+                        <Map updateId={this.updateId.bind(this)} id={this.state.id} makeNew={this.state.makeNew} setNewCoords={this.setNewCoords.bind(this)}/>
                     </Paper>
                     <Paper style={{width: "25%"}} zDepth={3}>
-                        <OrgUnitInfo id={this.state.id}/>
+                        <OrgUnitInfo id={this.state.id} makeNew={this.setMakeNew.bind(this)} makeNewCoords={this.state.makeNewCoords}/>
                     </Paper>
                 </div>
 

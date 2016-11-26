@@ -21,7 +21,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
          {props.poly.map(polygon => (
            <Polygon
            {...polygon}
-                onClick={() => props.onPolyClick(polygon)}
+                onClick={() => props.onPolyClick(event, polygon)}
                 onRightClick = {() => props.onPolyRightClick(polygon)}
            />
         ))}
@@ -51,6 +51,7 @@ export default class Map extends React.Component {
             },
             id: 'id',
             parentId: undefined,
+            makeNew: false,
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.onLoad = this.onLoad.bind(this);
@@ -72,6 +73,12 @@ export default class Map extends React.Component {
         if(nextProps.id != this.state.id){
             this.updateMap(nextProps.id);
         }
+        if(nextProps.makeNew == true && nextProps.makeNew != this.state.makeNew){
+            this.setState({
+                makeNew: true,
+            });
+        }
+
     }
 
     handleMapLoad(map) {
@@ -232,10 +239,17 @@ export default class Map extends React.Component {
         }));
     }
 
-    handlePolyClick(polygon){
+    handlePolyClick(event, polygon){
         if(polygon.id != undefined) {
             this.props.updateId(polygon.id);
         }
+        if(this.state.makeNew == true){
+            this.props.setMakeNew({
+                lat: 10,
+                lng: 10,
+            });
+        }
+        console.log(event.latLng);
     }
     handlePolyRightClick(polygon){
         if(this.state.parentId != undefined){
@@ -285,14 +299,13 @@ export default class Map extends React.Component {
         }));
     }
 
-    handleMapClick(){
+    handleMapClick(event){
         console.log("map is clicked");
         //this.updateMap("ObV5AR1NECl");
     }
 
     updateBounds(response) {
         if (response != undefined) {
-            console.log("HERE");
             var bounds = new google.maps.LatLngBounds();
 
             response = response.split("[");
@@ -315,9 +328,6 @@ export default class Map extends React.Component {
             });
             this._mapComponent.fitBounds(bounds);
         }else{
-
-            console.log("and here");
-
             this.setState({
                 zoom: 8,
                 center: {
