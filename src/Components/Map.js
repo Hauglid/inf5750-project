@@ -2,6 +2,7 @@ import React from 'react';
 import {withGoogleMap, GoogleMap, Marker, Polygon, Polyline} from "react-google-maps"
 import {loadUnitInfo} from '../api'
 import {getDistance, findCenter} from './Toolbox'
+import Snackbar from 'material-ui/Snackbar';
 
 
 const GettingStartedGoogleMap = withGoogleMap(props => (
@@ -455,6 +456,12 @@ export default class Map extends React.Component {
                     zooming = {this.state.zoom}
                     center = {this.state.center}
 
+                />
+                <Snackbar
+                    open={this.state.open}
+                    message="Event added to your calendar"
+                    autoHideDuration={4000}
+                    onRequestClose={this.handleRequestClose}
                 />
             </div>
         );
