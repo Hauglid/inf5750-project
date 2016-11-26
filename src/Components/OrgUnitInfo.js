@@ -123,13 +123,11 @@ export default class OrgUnitInfo extends React.Component {
     }
 
     saveUnit(unit) {
-        console.log(unit);
         saveOrganisationUnit(unit)
             .catch(() => alert("Could not save unit"));
     }
 
     updateUnit(unit) {
-        console.log(unit);
         updateOrganisationUnit(unit)
             .catch(() => alert("Could not save unit"));
     }
@@ -151,8 +149,8 @@ export default class OrgUnitInfo extends React.Component {
                 this.loadUnitInfo(this.state.id);
             });
         }
+
         if(nextProps.makeNewCoords != this.state.unitInfo["coordinates"]) {
-            console.log(nextProps);
             this.setState({
                 unitInfo: {
                     coordinates: nextProps.makeNewCoords
@@ -174,7 +172,6 @@ export default class OrgUnitInfo extends React.Component {
             shortName: "Arab Clinic",
             coordinates: "[-13.221,8.4832]"
         };
-        console.log(a);
         this.updateUnit(a);
 
 
@@ -203,10 +200,6 @@ export default class OrgUnitInfo extends React.Component {
                 });
 
             });
-    }
-
-    getLevel() {
-        return this.state.unitInfo["level"];
     }
 
     render() {
