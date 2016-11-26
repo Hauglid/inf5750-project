@@ -65,6 +65,7 @@ export default class OrgUnitInfo extends React.Component {
 
     newUnit() {
         console.log("New");
+        this.props.makeNew(true);
         this.setState({
             editing: true,
             new: true,
@@ -91,6 +92,7 @@ export default class OrgUnitInfo extends React.Component {
 
     cancelButton() {
         console.log("Cancel");
+        this.props.makeNew(false);
         this.loadUnitInfo(this.props.id);
 
         this.setState({
@@ -103,6 +105,7 @@ export default class OrgUnitInfo extends React.Component {
 
     saveButton() {
         console.log("Save");
+        this.props.makeNew(false);
         this.setState({editing: false});
 
         if (this.state.new) {
@@ -142,12 +145,22 @@ export default class OrgUnitInfo extends React.Component {
                 this.loadUnitInfo(this.state.id);
             });
         }
+        if(nextProps.makeNewCoords != this.state.unitInfo["coordinates"]) {
+            console.log(nextProps);
+            this.setState({
+                unitInfo: {
+                    coordinates: nextProps.makeNewCoords
+                }
+            })
+        }
     }
 
     saveTester() {
         console.log("saveTester");
         console.log(this.state.district);
         console.log(this.state.unitInfo["parent"]["id"]);
+        console.log(this.state.unitInfo["level"]);
+
 
     }
 
@@ -173,6 +186,10 @@ export default class OrgUnitInfo extends React.Component {
                 });
 
             });
+    }
+
+    getLevel() {
+        return this.state.unitInfo["level"];
     }
 
     render() {
