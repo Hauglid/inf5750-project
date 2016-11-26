@@ -1,15 +1,17 @@
 import React from 'react';
-import {saveOrganisationUnit, loadUnitInfo} from '../api';
+import {loadOrganisationUnits, saveOrganisationUnit, loadUnitInfo} from '../api';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 export default class OrgUnitInfo extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            isSaving: false,
             unitInfo: [],
+            allUnits: [],
             editing: false,
         };
 
@@ -17,12 +19,16 @@ export default class OrgUnitInfo extends React.Component {
         this.saveButton = this.saveButton.bind(this);
         this.cancelButton = this.cancelButton.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.newUnit = this.newUnit.bind(this);
+        this.saveUnit = this.saveUnit.bind(this);
     }
 
     componentDidMount() {
+        this.getDistricts();
         this.loadUnitInfo(this.props.id);
     }
+
 
     //
     // loadInfo() {
@@ -41,24 +47,27 @@ export default class OrgUnitInfo extends React.Component {
             this.setState({
                 unitInfo: organisationUnit,
                 originalUnitInfo: organisationUnit,
+                district: organisationUnit["parent"]["id"]
             });
         });
     }
 
 
     handleChange(category, event) {
-        var info = this.state.unitInfo;
-        info[category] = event.target.value;
-        this.setState({
-            unitInfo: info,
-        });
+        if (this.state.editing) {
+            var info = this.state.unitInfo;
+            info[category] = event.target.value;
+            this.setState({
+                unitInfo: info,
+            });
+        }
     };
 
     newUnit() {
         console.log("New");
         this.setState({
             editing: true,
-            oldUnitInfo: this.state.unitInfo,
+            new: true,
             unitInfo: {
                 displayName: "",
                 openingDate: "",
@@ -67,7 +76,6 @@ export default class OrgUnitInfo extends React.Component {
             }}
             //, function() {console.log(this.state.unitInfo);}
         );
-
     }
 
     editButton() {
@@ -96,9 +104,19 @@ export default class OrgUnitInfo extends React.Component {
     saveButton() {
         console.log("Save");
         this.setState({editing: false});
-        console.log(this.isValid());
-        this.saveUnit(this.state.unitInfo);
 
+        if (this.state.new) {
+            var a = {
+                parent:{
+                    "id":this.state.district
+                },
+                openingDate: this.state.unitInfo["openingDate"],
+                name: this.state.unitInfo["displayName"],
+                shortName: this.state.unitInfo["displayName"],
+                coordinates: this.state.unitInfo["coordinates"]
+            };
+            this.saveUnit(a);
+        }
     }
 
     saveUnit(unit) {
@@ -112,8 +130,7 @@ export default class OrgUnitInfo extends React.Component {
         return !(
           this.state.unitInfo["displayName"] &&
           this.state.unitInfo["openingDate"] &&
-          this.state.unitInfo["coordinates"] &&
-          this.state.unitInfo["id"]
+          this.state.district
         );
     }
 
@@ -127,6 +144,36 @@ export default class OrgUnitInfo extends React.Component {
         }
     }
 
+    saveTester() {
+        console.log("saveTester");
+        console.log(this.state.district);
+        console.log(this.state.unitInfo["parent"]["id"]);
+
+    }
+
+    handleSelectChange(event, index, district) {
+        this.setState({district: district});
+    }
+
+    getDistricts() {
+        console.log("getDistricts");
+        var districts = [];
+        loadOrganisationUnits(3)
+            .then((organisationUnits) => {
+                districts = organisationUnits
+                    .map(item => {
+                        return (
+                            <MenuItem key={item.id} value={item.id} primaryText={item.displayName}/>
+                        );
+                    });
+            })
+            .then(() => {
+                this.setState({
+                    allUnits: districts,
+                });
+
+            });
+    }
 
     render() {
 
@@ -136,15 +183,15 @@ export default class OrgUnitInfo extends React.Component {
                 <RaisedButton
                     label={this.state.editing ? "Cancel" : "Edit"}
                     onClick={this.state.editing ? this.cancelButton : this.editButton}
-                    primary={this.state.editing ? false : true}/>
+                    primary={!this.state.editing}/>
                 <RaisedButton
                     label={this.state.editing ? "Save" : "New"}
                     primary={true}
-                    onClick={this.state.editing ? this.saveButton : this.newUnit}/>
+                    onClick={this.state.editing ? this.saveButton : this.newUnit}
+                    disabled={this.state.editing ? this.isValid() : false }/>
                 <br/>
                 <div>
                     <TextField
-                        disabled={!this.state.editing}
                         floatingLabelFixed={true}
                         underlineShow={this.state.editing}
                         floatingLabelText="Name"
@@ -152,7 +199,6 @@ export default class OrgUnitInfo extends React.Component {
                         value={this.state.unitInfo["displayName"]} />
                     <br/>
                     <TextField
-                        disabled={!this.state.editing}
                         floatingLabelFixed={true}
                         onChange={this.handleChange.bind(this, "openingDate")}
                         underlineShow={this.state.editing}
@@ -160,7 +206,6 @@ export default class OrgUnitInfo extends React.Component {
                         value={this.state.unitInfo["openingDate"]} />
                     <br/>
                     <TextField
-                        disabled={!this.state.editing}
                         floatingLabelFixed={true}
                         onChange={this.handleChange.bind(this, "coordinates")}
                         underlineShow={this.state.editing}
@@ -168,14 +213,23 @@ export default class OrgUnitInfo extends React.Component {
                         value={this.state.unitInfo["coordinates"]} />
                     <br/>
                     <TextField
-                        disabled={!this.state.editing}
                         floatingLabelFixed={true}
                         onChange={this.handleChange.bind(this, "id")}
                         underlineShow={this.state.editing}
                         floatingLabelText="ID"
                         value={this.state.unitInfo["id"]} />
                     <br/>
-
+                    <SelectField
+                        floatingLabelText="District"
+                        onChange={this.handleSelectChange.bind(this)}
+                        value={this.state.district}
+                    >
+                        {this.state.allUnits}
+                    </SelectField>
+                    <RaisedButton
+                        label={"tester"}
+                        onClick={this.saveTester.bind(this)}
+                        primary={!this.state.editing}/>
 
                 </div>
             </div>
