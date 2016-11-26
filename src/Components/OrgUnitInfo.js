@@ -47,6 +47,7 @@ export default class OrgUnitInfo extends React.Component {
             this.setState({
                 unitInfo: organisationUnit,
                 originalUnitInfo: organisationUnit,
+                district: organisationUnit["parent"]["id"]
             });
         });
     }
@@ -128,8 +129,8 @@ export default class OrgUnitInfo extends React.Component {
     isValid() {
         return !(
           this.state.unitInfo["displayName"] &&
-          this.state.unitInfo["openingDate"]
-          // this.state.unitInfo["coordinates"]
+          this.state.unitInfo["openingDate"] &&
+          this.state.district
         );
     }
 
@@ -146,6 +147,7 @@ export default class OrgUnitInfo extends React.Component {
     saveTester() {
         console.log("saveTester");
         console.log(this.state.district);
+        console.log(this.state.unitInfo["parent"]["id"]);
 
     }
 
@@ -156,7 +158,7 @@ export default class OrgUnitInfo extends React.Component {
     getDistricts() {
         console.log("getDistricts");
         var districts = [];
-        loadOrganisationUnits(2)
+        loadOrganisationUnits(3)
             .then((organisationUnits) => {
                 districts = organisationUnits
                     .map(item => {
@@ -167,7 +169,7 @@ export default class OrgUnitInfo extends React.Component {
             })
             .then(() => {
                 this.setState({
-                    allUnits: districts
+                    allUnits: districts,
                 });
 
             });
