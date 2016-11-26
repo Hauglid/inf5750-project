@@ -212,11 +212,12 @@ export default class Map extends React.Component {
     }
 
     //works for lvl4
-    setMarkers(districtId) {
+    setMarkers(districtId, blueId) {
         var newMarkers = [];
         loadUnitInfo(districtId).then((organisationUnit => {
             var firstResponse = organisationUnit["children"];
 
+            /*
             if(organisationUnit["level"] == 4){
                 if(organisationUnit["coordinates"] != undefined){
                     var coordinates = organisationUnit["coordinates"];
@@ -241,6 +242,7 @@ export default class Map extends React.Component {
                     key++;
                 }
             }
+            */
             for (var i = 0; i < firstResponse.length; i++) {
                 const currentId = firstResponse[i]["id"];
                 loadUnitInfo(currentId).then((metadata => {
@@ -253,15 +255,28 @@ export default class Map extends React.Component {
                             ret = ret.replace("]", "");
                             return ret;
                         });
-                        newMarkers.push({
-                            position: {
-                                lat: parseFloat(coordinates[1]),
-                                lng: parseFloat(coordinates[0]),
-                            },
-                            icon: icon,
-                            key: key,
-                            id: currentId,
-                        });
+
+                        if(currentId == blueId){
+                            newMarkers.push({
+                                position: {
+                                    lat: parseFloat(coordinates[1]),
+                                    lng: parseFloat(coordinates[0]),
+                                },
+                                icon: blueIcon,
+                                key: key,
+                                id: currentId,
+                            });
+                        }else {
+                            newMarkers.push({
+                                position: {
+                                    lat: parseFloat(coordinates[1]),
+                                    lng: parseFloat(coordinates[0]),
+                                },
+                                icon: icon,
+                                key: key,
+                                id: currentId,
+                            });
+                        }
                         key++;
                     }
                     this.setState({
@@ -358,7 +373,7 @@ export default class Map extends React.Component {
                     parentId: organisationUnit["parent"]["id"],
                 });
                 this.drawPolyLine(organisationUnit["parent"]["id"]);
-                this.setMarkers(districtId);
+                this.setMarkers(organisationUnit["parent"]["id"], districtId);
             }
         }));
     }
