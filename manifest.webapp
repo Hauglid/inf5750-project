@@ -1,0 +1,22 @@
+{
+    "version": "1",
+    "name": "Facility App",
+    "description": "DHIS2 Data table app",
+    "launch_path": "www/index.html",
+    "icons": {
+        "48": "icons/br-48.png",
+        "128": "icons/br-128.png"
+    },
+    "developer": {
+        "name": "Greg Rowles / Jan Henrik Overland",
+        "url": "https://launchpad.net/~greg-rowles / https://launchpad.net/~janhenrik-overland"
+    },
+    "default_locale": "en",
+    "activities": {
+        "dhis": {
+            "href": "*",
+            "auth": "admin:district",
+            "devHref": "http://localhost:8080"
+        }
+    }
+}
