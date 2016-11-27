@@ -1,7 +1,8 @@
 import React from 'react';
-import {withGoogleMap, GoogleMap, Marker, Polygon} from "react-google-maps"
+import {withGoogleMap, GoogleMap, Marker, Polygon, Polyline} from "react-google-maps"
 import {loadUnitInfo} from '../api'
 import {getDistance, findCenter} from './Toolbox'
+import Snackbar from 'material-ui/Snackbar';
 
 
 const GettingStartedGoogleMap = withGoogleMap(props => (
@@ -10,6 +11,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
         zoom={props.zooming}
         center={props.center}
         onClick={props.onMapClick}
+        onRightClick ={props.onMapRightClick}
     >
         {props.markers.map(marker => (
             <Marker
@@ -18,12 +20,18 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
             />
         ))}
 
-         {props.poly.map(polygon => (
+         {props.polygon.map(polygon => (
            <Polygon
            {...polygon}
-                onClick={() => props.onPolyClick(event, polygon)}
+                onClick={() => props.onPolyClick(polygon)}
                 onRightClick = {() => props.onPolyRightClick(polygon)}
            />
+        ))}
+
+        {props.polyline.map(polyline => (
+            <Polyline
+                {...polyline}
+            />
         ))}
 
     </GoogleMap>
@@ -32,6 +40,9 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
 var lvl = 0;
 var key = 0;
 var sierraBounds = undefined;
+const icon = 'icon.png';
+const greenIcon = 'icon_green.png';
+const blueIcon = 'icon_blue.png';
 
 export default class Map extends React.Component {
     constructor(props) {
@@ -39,6 +50,12 @@ export default class Map extends React.Component {
         this.state = {
             markers: [],
             polygon: [{
+                strokeColor: "#000",
+                path: [],
+                key: 'key',
+                id: 'id',
+            }],
+            polyline: [{
                 strokeColor: "#000",
                 path: [],
                 key: 'key',
@@ -52,6 +69,7 @@ export default class Map extends React.Component {
             id: 'id',
             parentId: undefined,
             makeNew: false,
+            open: false,
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.onLoad = this.onLoad.bind(this);
@@ -64,6 +82,8 @@ export default class Map extends React.Component {
         this.handleMarkerClick = this.handleMarkerClick.bind(this);
         this.updateBounds = this.updateBounds.bind(this);
         this.handlePolyRightClick = this.handlePolyRightClick.bind(this);
+        this.drawPolyLine = this.drawPolyLine.bind(this);
+        this.handleMapRightClick = this.handleMapRightClick.bind(this);
     }
 
     componentDidMount() {
@@ -77,6 +97,18 @@ export default class Map extends React.Component {
             this.setState({
                 makeNew: true,
             });
+        }
+        if(nextProps.makeNew == false && nextProps.makeNew != this.state.makeNew){
+            this.setState({
+                makeNew: false,
+            });
+            var arr = this.state.markers;
+            if(arr[arr.length -1].id == undefined){
+                arr.pop();
+                this.setState({
+                    markers: arr,
+                });
+            }
         }
 
     }
@@ -181,39 +213,20 @@ export default class Map extends React.Component {
     }
 
     //works for lvl4
-    setMarkers(districtId) {
-        var key = 0;
+    setMarkers(districtId, blueId) {
+        this.setState({
+            open: false,
+        });
         var newMarkers = [];
         loadUnitInfo(districtId).then((organisationUnit => {
             var firstResponse = organisationUnit["children"];
 
-            if(organisationUnit["level"] == 4){
-                if(organisationUnit["coordinates"] != undefined){
-                    var coordinates = organisationUnit["coordinates"];
-                    coordinates = coordinates.split(",");
-                    coordinates = coordinates.map(function(a){
-                        var ret = a.replace("[","");
-                        ret = ret.replace("]","");
-                        return ret;
-                    });
-
-                    this.setState({
-                        markers: [{
-                            position: {
-                                lat: parseFloat(coordinates[1]),
-                                lng: parseFloat(coordinates[0]),
-                            },
-                            key: key,
-                            id: organisationUnit["id"],
-                        }],
-                    });
-                }
-            }
             for (var i = 0; i < firstResponse.length; i++) {
                 const currentId = firstResponse[i]["id"];
                 loadUnitInfo(currentId).then((metadata => {
                     var coordinates = metadata["coordinates"];
                     if(coordinates != undefined){
+
                         coordinates = coordinates.split(",");
 
                         coordinates = coordinates.map(function(a){
@@ -221,15 +234,35 @@ export default class Map extends React.Component {
                             ret = ret.replace("]", "");
                             return ret;
                         });
-                        newMarkers.push({
-                            position: {
-                                lat: parseFloat(coordinates[1]),
-                                lng: parseFloat(coordinates[0]),
-                            },
-                            key: key,
-                            id: currentId,
-                        });
+
+                        if(currentId == blueId){
+                            newMarkers.push({
+                                position: {
+                                    lat: parseFloat(coordinates[1]),
+                                    lng: parseFloat(coordinates[0]),
+                                },
+                                icon: blueIcon,
+                                key: key,
+                                id: currentId,
+                            });
+                        }else {
+                            newMarkers.push({
+                                position: {
+                                    lat: parseFloat(coordinates[1]),
+                                    lng: parseFloat(coordinates[0]),
+                                },
+                                icon: icon,
+                                key: key,
+                                id: currentId,
+                            });
+                        }
                         key++;
+                    }else {
+                        if (blueId == currentId) {
+                            this.setState({
+                                open: true,
+                            });
+                        }
                     }
                     this.setState({
                         markers: newMarkers,
@@ -239,14 +272,44 @@ export default class Map extends React.Component {
         }));
     }
 
-    handlePolyClick(event, polygon){
+    drawPolyLine(districtId){
+        var path = [];
+        loadUnitInfo(districtId).then((organisationUnit => {
+            var response = organisationUnit["coordinates"];
+
+            this.updateBounds(response);
+
+            response = response.split("[");
+            for(var i = 0; i < response.length; i++) {
+
+                if (response[i] != "") {
+                    response[i] = response[i].replace("],", "");
+                    response[i] = response[i].replace("]]]]", "");
+                    response[i] = response[i].split(",");
+
+                    var  newCord = {
+                        lat: parseFloat(response[i][1]),
+                        lng: parseFloat(response[i][0]),
+                    };
+                    path.push(newCord);
+                }
+            }
+            this.setState({
+                polyline: [{
+                    strokeColor: "#000",
+                    path: path,
+                    key: key,
+                    id: this.state.id,
+                }],
+            });
+            key++;
+        }));
+    }
+
+    handlePolyClick(polygon){
         if(polygon.id != undefined) {
             this.props.updateId(polygon.id);
         }
-        if(this.state.makeNew == true){
-            this.props.setNewCoords(10, 10);
-        }
-        console.log(event.latLng);
     }
     handlePolyRightClick(polygon){
         if(this.state.parentId != undefined){
@@ -261,6 +324,7 @@ export default class Map extends React.Component {
             if(organisationUnit["level"] < 2){
                 this.setState({
                     polygon: [],
+                    polyline: [],
                     markers: [],
                     id: districtId,
                     parentId: undefined,
@@ -270,6 +334,7 @@ export default class Map extends React.Component {
                 this.setState({
                     polygon: [],
                     markers: [],
+                    polyline: [],
                     id: districtId,
                     parentId: organisationUnit["parent"]["id"],
                 });
@@ -278,27 +343,55 @@ export default class Map extends React.Component {
                 this.setState({
                     polygon: [],
                     markers: [],
+                    polyline: [],
                     id: districtId,
                     parentId: organisationUnit["parent"]["id"],
                 });
-                this.drawDistrict(districtId);
+                this.drawPolyLine(districtId);
                 this.setMarkers(districtId);
             }else{
                 this.setState({
                     polygon: [],
                     markers: [],
+                    polyline: [],
                     id: districtId,
                     parentId: organisationUnit["parent"]["id"],
                 });
-                this.drawDistrict(organisationUnit["parent"]["id"]);
-                this.setMarkers(districtId);
+                this.drawPolyLine(organisationUnit["parent"]["id"]);
+                this.setMarkers(organisationUnit["parent"]["id"], districtId);
             }
         }));
     }
 
     handleMapClick(event){
-        console.log("map is clicked");
-        //this.updateMap("ObV5AR1NECl");
+        if(this.state.makeNew == true){
+            this.props.setNewCoords(event.latLng.lat(),event.latLng.lng());
+
+            var arr = this.state.markers;
+
+            if(arr[arr.length -1].id == undefined){
+                arr.pop();
+            }
+            arr.push({
+                position: {
+                    lat: event.latLng.lat(),
+                    lng: event.latLng.lng(),
+                },
+                icon: greenIcon,
+                key: key,
+                id: undefined,
+            });
+            key++;
+
+            this.setState({
+                markers: arr,
+            });
+        }
+    }
+    handleMapRightClick(){
+        if(this.state.parentId != undefined){
+            this.props.updateId(this.state.parentId);
+        }
     }
 
     updateBounds(response) {
@@ -353,14 +446,21 @@ export default class Map extends React.Component {
                     }
                     onMapLoad={this.handleMapLoad}
                     onMapClick={this.handleMapClick}
+                    onMapRightClick={this.handleMapRightClick}
                     markers={this.state.markers}
                     onMarkerClick={this.handleMarkerClick}
-                    poly = {this.state.polygon}
+                    polygon = {this.state.polygon}
+                    polyline = {this.state.polyline}
                     onPolyClick = {this.handlePolyClick}
                     onPolyRightClick = {this.handlePolyRightClick}
                     zooming = {this.state.zoom}
                     center = {this.state.center}
 
+                />
+                <Snackbar
+                    open={this.state.open}
+                    message="Coordinates not found"
+                    autoHideDuration={4000}
                 />
             </div>
         );

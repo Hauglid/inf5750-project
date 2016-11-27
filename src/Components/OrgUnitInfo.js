@@ -79,7 +79,6 @@ export default class OrgUnitInfo extends React.Component {
             //, function() {console.log(this.state.unitInfo);}
         );
     }
-
     editButton() {
         console.log("Edit");
         this.setState({
