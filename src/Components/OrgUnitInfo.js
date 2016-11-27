@@ -1,5 +1,5 @@
 import React from 'react';
-import {updateOrganisationUnit, loadOrganisationUnits, saveOrganisationUnit, loadUnitInfo} from '../api';
+import {searchBy, updateOrganisationUnit, loadOrganisationUnits, saveOrganisationUnit, loadUnitInfo} from '../api';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
@@ -50,7 +50,10 @@ export default class OrgUnitInfo extends React.Component {
                 originalUnitInfo: organisationUnit,
                 district: organisationUnit["parent"]["id"]
             });
+            this.getDistricts2(organisationUnit.parent.id);
         });
+
+        // this.getDistricts2(id);
     }
 
 
@@ -201,6 +204,15 @@ export default class OrgUnitInfo extends React.Component {
             });
     }
 
+    getDistricts2(id) {
+
+        const response = searchBy("parent.id", id);
+
+        console.log(response);
+
+    }
+
+
     render() {
 
         return (
@@ -209,12 +221,13 @@ export default class OrgUnitInfo extends React.Component {
                 <RaisedButton
                     label={this.state.editing ? "Cancel" : "Edit"}
                     onClick={this.state.editing ? this.cancelButton : this.editButton}
-                    primary={!this.state.editing}/>
+                    primary={!this.state.editing}
+                    disabled={this.state.unitInfo["level"] != 4}/>
                 <RaisedButton
                     label={this.state.editing ? "Save" : "New"}
                     primary={true}
                     onClick={this.state.editing ? this.saveButton : this.newUnit}
-                    disabled={this.state.editing ? this.isValid() : false }/>
+                    disabled={this.state.unitInfo["level"] != 3 ? true : this.isValid() }/>
                 <br/>
                 <div>
                     <TextField
