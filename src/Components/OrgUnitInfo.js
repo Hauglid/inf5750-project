@@ -99,6 +99,7 @@ export default class OrgUnitInfo extends React.Component {
 
         this.setState({
             editing: false,
+            new: false,
         }
         //, function() {console.log(this.state.unitInfo)}
         );
@@ -212,6 +213,23 @@ export default class OrgUnitInfo extends React.Component {
 
     }
 
+    cancelEditButtonDisabled() {
+        if (this.state.new) {
+            return false;
+        }
+        if (this.state.unitInfo["level"] != 4) {
+            return true;
+        }
+    }
+
+    newSaveButtonDisabled() {
+        if (this.state.editing == true) {
+            return false;
+        }
+        if (this.state.unitInfo["level"] != 3) {
+            return true;
+        }
+    }
 
     render() {
 
@@ -222,12 +240,12 @@ export default class OrgUnitInfo extends React.Component {
                     label={this.state.editing ? "Cancel" : "Edit"}
                     onClick={this.state.editing ? this.cancelButton : this.editButton}
                     primary={!this.state.editing}
-                    disabled={this.state.unitInfo["level"] != 4}/>
+                    disabled={this.cancelEditButtonDisabled()}/>
                 <RaisedButton
                     label={this.state.editing ? "Save" : "New"}
                     primary={true}
                     onClick={this.state.editing ? this.saveButton : this.newUnit}
-                    disabled={this.state.unitInfo["level"] != 3 ? true : this.isValid() }/>
+                    disabled={this.newSaveButtonDisabled() ? true : this.isValid() }/>
                 <br/>
                 <div>
                     <TextField
