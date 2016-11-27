@@ -1,9 +1,7 @@
 import React from 'react';
-import {searchBy, updateOrganisationUnit, loadOrganisationUnits, saveOrganisationUnit, loadUnitInfo} from '../api';
+import {searchBy, updateOrganisationUnit, saveOrganisationUnit, loadUnitInfo} from '../api';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
 
 export default class OrgUnitInfo extends React.Component {
     constructor(props) {
@@ -28,24 +26,12 @@ export default class OrgUnitInfo extends React.Component {
         this.loadUnitInfo(this.props.id);
     }
 
-
-    //
-    // loadInfo() {
-    //     console.log("loading");
-    //     loadOrganisationUnits().then((organisationUnits) => {
-    //         this.setState({
-    //             items:organisationUnits,
-    //         });
-    //     });
-    // }
-
     // loads the information about an organisation unit
     loadUnitInfo(id) {
         console.log("Loading unit info...");
         loadUnitInfo(id).then((organisationUnit) => {
             this.setState({
                 unitInfo: organisationUnit,
-                originalUnitInfo: organisationUnit,
             }, this.getDistrict);
         });
     }
@@ -65,15 +51,17 @@ export default class OrgUnitInfo extends React.Component {
         console.log("New");
         this.props.makeNew(true);
         this.setState({
+            unitInfo: {
+                displayName: "troll",
+                openingDate: "troll2",
+                coordinates: "troll3"
+            }
+        });
+        this.setState({
             editing: true,
             new: true,
-            unitInfo: {
-                displayName: "1",
-                openingDate: "",
-                coordinates: "",
-                id: ""
-            }}
-            //, function() {console.log(this.state.unitInfo);}
+            }
+            , function() {console.log(this.state.unitInfo);}
         );
     }
     editButton() {
@@ -103,12 +91,15 @@ export default class OrgUnitInfo extends React.Component {
     saveButton() {
         console.log("Save");
         this.props.makeNew(false);
-        this.setState({editing: false});
+        this.setState({
+            editing: false,
+            new: false,
+        });
 
         if (this.state.new) {
             var a = {
                 parent:{
-                    "id":this.state.district
+                    "id":this.state.districtId
                 },
                 openingDate: this.state.unitInfo["openingDate"],
                 name: this.state.unitInfo["displayName"],
@@ -116,6 +107,16 @@ export default class OrgUnitInfo extends React.Component {
                 coordinates: this.state.unitInfo["coordinates"]
             };
             this.saveUnit(a);
+        } else {
+            var a = {
+                id: this.state.unitInfo["id"],
+                openingDate: this.state.unitInfo["openingDate"],
+                name: this.state.unitInfo["displayName"],
+                shortName: this.state.unitInfo["displayName"],
+                coordinates: this.state.unitInfo["coordinates"]
+            };
+            console.log(a);
+            this.updateUnit(a);
         }
     }
 
@@ -134,7 +135,7 @@ export default class OrgUnitInfo extends React.Component {
         return !(
           this.state.unitInfo["displayName"] &&
           this.state.unitInfo["openingDate"] &&
-          this.state.district
+          this.state.districtId
         );
     }
 
@@ -170,6 +171,11 @@ export default class OrgUnitInfo extends React.Component {
         //     coordinates: "[-13.221,8.4832]"
         // };
         // this.updateUnit(a);
+        console.log(this.state.unitInfo);
+        console.log(this.state.districtId);
+        console.log(this.isValid());
+        console.log(this.state);
+
 
     }
 
@@ -247,17 +253,17 @@ export default class OrgUnitInfo extends React.Component {
                         floatingLabelText="Coordinates"
                         value={this.state.unitInfo["coordinates"]} />
                     <br/>
-                    <TextField
-                        floatingLabelFixed={true}
-                        onChange={this.handleChange.bind(this, "id")}
-                        underlineShow={this.state.editing}
-                        floatingLabelText="ID"
-                        value={this.state.unitInfo["id"]} />
-                    <br/>
+                    {/*<TextField*/}
+                        {/*floatingLabelFixed={true}*/}
+                        {/*onChange={this.handleChange.bind(this, "id")}*/}
+                        {/*underlineShow={this.state.editing}*/}
+                        {/*floatingLabelText="ID"*/}
+                        {/*value={this.state.unitInfo["id"]} />*/}
+                    {/*<br/>*/}
                     <TextField
                         floatingLabelFixed={true}
                         floatingLabelText="District"
-                        value={this.state.unitInfo["level"] > 2 ? this.state.districtName : ""}/>
+                        value={this.state.unitInfo["level"] > 2 ? this.state.districtId : ""}/>
                     <br/>
                     <RaisedButton
                         label={"tester"}
