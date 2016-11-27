@@ -19,14 +19,12 @@ export default class OrgUnitInfo extends React.Component {
         this.saveButton = this.saveButton.bind(this);
         this.cancelButton = this.cancelButton.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.newUnit = this.newUnit.bind(this);
         this.saveUnit = this.saveUnit.bind(this);
         this.updateUnit = this.updateUnit.bind(this);
     }
 
     componentDidMount() {
-        this.getDistricts();
         this.loadUnitInfo(this.props.id);
     }
 
@@ -48,12 +46,8 @@ export default class OrgUnitInfo extends React.Component {
             this.setState({
                 unitInfo: organisationUnit,
                 originalUnitInfo: organisationUnit,
-                district: organisationUnit["parent"]["id"]
-            });
-            // this.getDistricts2(organisationUnit.parent.id);
+            }, this.getDistrict);
         });
-
-        // this.getDistricts2(id);
     }
 
 
@@ -177,57 +171,25 @@ export default class OrgUnitInfo extends React.Component {
         // };
         // this.updateUnit(a);
 
-
-        // const response = searchBy("parent.id", id);
-
-        this.getDistrict();
-        console.log(this.state.district);
-
     }
 
     getDistrict() {
+        console.log("getDistrict");
         if (this.state.unitInfo["level"] == 3) {
             this.setState({
-                district: {
-                    id: this.state.id,
-                    name: this.state.unitInfo["displayName"]
-                }
+                    districtId: this.state.id,
+                    districtName: this.state.unitInfo["displayName"]
             });
         } else if (this.state.unitInfo["level"] == 4) {
-            this.setState({
-                district: {
-                    id: this.state.unitInfo.parent.id,
-                    name: "Mongo"
-                }
-            })
+            searchBy("id", this.state.unitInfo["parent"]["id"])
+                .then((unit) => {
+                    this.setState({
+                            districtName: unit[0]["displayName"],
+                            districtId: unit[0]["id"]
+                    });
+                });
         }
     }
-
-    handleSelectChange(event, index, district) {
-        this.setState({district: district});
-    }
-
-    getDistricts() {
-        console.log("getDistricts");
-        var districts = [];
-        loadOrganisationUnits(3)
-            .then((organisationUnits) => {
-                districts = organisationUnits
-                    .map(item => {
-                        return (
-                            <MenuItem key={item.id} value={item.id} primaryText={item.displayName}/>
-                        );
-                    });
-            })
-            .then(() => {
-                this.setState({
-                    allUnits: districts,
-                });
-
-            });
-    }
-
-
 
     cancelEditButtonDisabled() {
         if (this.state.new) {
@@ -295,16 +257,8 @@ export default class OrgUnitInfo extends React.Component {
                     <TextField
                         floatingLabelFixed={true}
                         floatingLabelText="District"
-                        disabled={true}
-                        value={this.state.unitInfo["level"] > 2 ? this.state.district["name"] : ""}/>
+                        value={this.state.unitInfo["level"] > 2 ? this.state.districtName : ""}/>
                     <br/>
-                    {/*<SelectField*/}
-                        {/*floatingLabelText="District"*/}
-                        {/*onChange={this.handleSelectChange.bind(this)}*/}
-                        {/*value={this.state.district}*/}
-                    {/*>*/}
-                        {/*{this.state.allUnits}*/}
-                    {/*</SelectField>*/}
                     <RaisedButton
                         label={"tester"}
                         onClick={this.saveTester.bind(this)}
