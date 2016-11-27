@@ -50,7 +50,7 @@ export default class OrgUnitInfo extends React.Component {
                 originalUnitInfo: organisationUnit,
                 district: organisationUnit["parent"]["id"]
             });
-            this.getDistricts2(organisationUnit.parent.id);
+            // this.getDistricts2(organisationUnit.parent.id);
         });
 
         // this.getDistricts2(id);
@@ -168,17 +168,39 @@ export default class OrgUnitInfo extends React.Component {
         //console.log(this.state.unitInfo["parent"]["id"]);
         //console.log(this.state.unitInfo["level"]);
 
-        var a = {
-            id: "nq7F0t1Pz6t",
-            openingDate: "1970-01-01T00:00:00.000",
-            name: "Arab Clinic",
-            shortName: "Arab Clinic",
-            coordinates: "[-13.221,8.4832]"
-        };
-        this.updateUnit(a);
+        // var a = {
+        //     id: "nq7F0t1Pz6t",
+        //     openingDate: "1970-01-01T00:00:00.000",
+        //     name: "Arab Clinic",
+        //     shortName: "Arab Clinic",
+        //     coordinates: "[-13.221,8.4832]"
+        // };
+        // this.updateUnit(a);
 
 
+        // const response = searchBy("parent.id", id);
 
+        this.getDistrict();
+        console.log(this.state.district);
+
+    }
+
+    getDistrict() {
+        if (this.state.unitInfo["level"] == 3) {
+            this.setState({
+                district: {
+                    id: this.state.id,
+                    name: this.state.unitInfo["displayName"]
+                }
+            });
+        } else if (this.state.unitInfo["level"] == 4) {
+            this.setState({
+                district: {
+                    id: this.state.unitInfo.parent.id,
+                    name: "Mongo"
+                }
+            })
+        }
     }
 
     handleSelectChange(event, index, district) {
@@ -205,13 +227,7 @@ export default class OrgUnitInfo extends React.Component {
             });
     }
 
-    getDistricts2(id) {
 
-        const response = searchBy("parent.id", id);
-
-        console.log(response);
-
-    }
 
     cancelEditButtonDisabled() {
         if (this.state.new) {
@@ -276,13 +292,19 @@ export default class OrgUnitInfo extends React.Component {
                         floatingLabelText="ID"
                         value={this.state.unitInfo["id"]} />
                     <br/>
-                    <SelectField
+                    <TextField
+                        floatingLabelFixed={true}
                         floatingLabelText="District"
-                        onChange={this.handleSelectChange.bind(this)}
-                        value={this.state.district}
-                    >
-                        {this.state.allUnits}
-                    </SelectField>
+                        disabled={true}
+                        value={this.state.unitInfo["level"] > 2 ? this.state.district["name"] : ""}/>
+                    <br/>
+                    {/*<SelectField*/}
+                        {/*floatingLabelText="District"*/}
+                        {/*onChange={this.handleSelectChange.bind(this)}*/}
+                        {/*value={this.state.district}*/}
+                    {/*>*/}
+                        {/*{this.state.allUnits}*/}
+                    {/*</SelectField>*/}
                     <RaisedButton
                         label={"tester"}
                         onClick={this.saveTester.bind(this)}
