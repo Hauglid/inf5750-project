@@ -124,12 +124,19 @@ export default class OrgUnitInfo extends React.Component {
 
     saveUnit(unit) {
         saveOrganisationUnit(unit)
+            .then(response => {
+                this.props.updateId(response["response"]["uid"]);
+            })
             .catch(() => alert("Could not save unit"));
+
     }
 
     updateUnit(unit) {
         updateOrganisationUnit(unit)
-            .catch(() => alert("Could not save unit"));
+            .then(response => {
+                this.props.updateId(unit.id, true);
+            })
+            .catch((error) => console.log(error));
     }
 
     //returns false if valid, true if not

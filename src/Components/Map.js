@@ -70,6 +70,7 @@ export default class Map extends React.Component {
             parentId: undefined,
             makeNew: false,
             open: false,
+            reload: false,
         };
         this.handleMapLoad = this.handleMapLoad.bind(this);
         this.onLoad = this.onLoad.bind(this);
@@ -92,6 +93,15 @@ export default class Map extends React.Component {
     componentWillReceiveProps(nextProps){
         if(nextProps.id != this.state.id){
             this.updateMap(nextProps.id);
+        }
+        if(this.state.reload != nextProps.reload){
+            this.setState({
+                reload: nextProps.reload,
+            });
+
+            if(nextProps.reload == true){
+                this.updateMap(this.state.id);
+            }
         }
         if(nextProps.makeNew == true && nextProps.makeNew != this.state.makeNew){
             this.setState({

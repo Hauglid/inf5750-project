@@ -15,12 +15,22 @@ export default class Body extends React.Component {
             id: "ImspTQPwCqd",
             makeNew: false,
             makeNewCoords: undefined,
+            reload: false,
         };
     }
-    updateId(id){
-        this.setState({
-            id: id,
-        });
+    updateId(id, reload){
+        if(reload != undefined){
+            this.setState({
+                id: id,
+                reload: reload,
+            });
+        }else{
+            this.setState({
+                id: id,
+                reload: false,
+            });
+        }
+
     }
 
     setNewCoords(lat, lng){
@@ -53,10 +63,10 @@ export default class Body extends React.Component {
                         <MapInfo updateId={this.updateId.bind(this)} id={this.state.id}/>
                     </Paper>
                     <Paper zDepth={3} style={{margin: "0px 5px", height: 520, width: "53%"}}>
-                        <Map updateId={this.updateId.bind(this)} id={this.state.id} makeNew={this.state.makeNew} setNewCoords={this.setNewCoords.bind(this)}/>
+                        <Map updateId={this.updateId.bind(this)} id={this.state.id} makeNew={this.state.makeNew} reload={this.state.reload} setNewCoords={this.setNewCoords.bind(this)}/>
                     </Paper>
                     <Paper style={{width: "25%"}} zDepth={3}>
-                        <OrgUnitInfo id={this.state.id} makeNew={this.setMakeNew.bind(this)} makeNewCoords={this.state.makeNewCoords}/>
+                        <OrgUnitInfo id={this.state.id} makeNew={this.setMakeNew.bind(this)} makeNewCoords={this.state.makeNewCoords} updateId={this.updateId.bind(this)}/>
                     </Paper>
                 </div>
 
