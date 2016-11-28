@@ -369,9 +369,12 @@ export default class Map extends React.Component {
             this.props.setNewCoords(event.latLng.lat(),event.latLng.lng());
 
             var arr = this.state.markers;
-
-            if(arr[arr.length -1].id == undefined){
-                arr.pop();
+            for(var i = 0; i < arr.length; i++){
+                if(arr[i].id == this.state.id){
+                    arr.splice(i,1);
+                }else if(arr[i].id == undefined){
+                    arr.splice(i,1);
+                }
             }
             arr.push({
                 position: {

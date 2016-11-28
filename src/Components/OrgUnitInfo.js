@@ -64,6 +64,7 @@ export default class OrgUnitInfo extends React.Component {
     }
     editButton() {
         console.log("Edit");
+        this.props.makeNew(true);
         this.setState({
             editing: true,
         }
@@ -115,7 +116,7 @@ export default class OrgUnitInfo extends React.Component {
                 openingDate: this.state.unitInfo["openingDate"],
                 name: this.state.unitInfo["displayName"],
                 shortName: this.state.unitInfo["displayName"],
-                coordinates: this.state.unitInfo["coordinates"]
+                coordinates: this.state.newCoordinates
             };
             this.updateUnit(a);
         }
