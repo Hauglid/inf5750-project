@@ -226,7 +226,6 @@ export default class Map extends React.Component {
                 const currentId = firstResponse[i]["id"];
                 loadUnitInfo(currentId).then((metadata => {
                     var coordinates = metadata["coordinates"];
-                    console.log(metadata["name"]+" "+coordinates);
                     if(coordinates != undefined){
 
                         coordinates = coordinates.split(",");

@@ -108,13 +108,15 @@ export default class OrgUnitInfo extends React.Component {
             this.saveUnit(a);
         } else {
             var a = {
+                parent:{
+                    "id":this.state.districtId
+                },
                 id: this.state.unitInfo["id"],
                 openingDate: this.state.unitInfo["openingDate"],
                 name: this.state.unitInfo["displayName"],
                 shortName: this.state.unitInfo["displayName"],
-                //coordinates: this.state.unitInfo["coordinates"]
+                coordinates: this.state.unitInfo["coordinates"]
             };
-            console.log(a);
             this.updateUnit(a);
         }
     }
