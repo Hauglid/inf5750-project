@@ -222,9 +222,11 @@ export default class Map extends React.Component {
             var firstResponse = organisationUnit["children"];
 
             for (var i = 0; i < firstResponse.length; i++) {
+
                 const currentId = firstResponse[i]["id"];
                 loadUnitInfo(currentId).then((metadata => {
                     var coordinates = metadata["coordinates"];
+                    console.log(metadata["name"]+" "+coordinates);
                     if(coordinates != undefined){
 
                         coordinates = coordinates.split(",");

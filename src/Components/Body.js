@@ -24,7 +24,7 @@ export default class Body extends React.Component {
     }
 
     setNewCoords(lat, lng){
-        var string = "["+lat+","+lng+"]";
+        var string = "["+lng+","+lat+"]";
         this.setState({
             makeNewCoords: string,
         });

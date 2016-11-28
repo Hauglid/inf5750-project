@@ -112,9 +112,9 @@ export default class OrgUnitInfo extends React.Component {
                 openingDate: this.state.unitInfo["openingDate"],
                 name: this.state.unitInfo["displayName"],
                 shortName: this.state.unitInfo["displayName"],
-                coordinates: this.state.unitInfo["coordinates"]
+                //coordinates: this.state.unitInfo["coordinates"]
             };
-            // console.log(a);
+            console.log(a);
             this.updateUnit(a);
         }
     }
