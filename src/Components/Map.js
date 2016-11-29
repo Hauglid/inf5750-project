@@ -43,7 +43,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
 var lvl = 0;
 var key = 0;
 var sierraBounds = undefined;
-const icon = 'icon.png';
+const icon = 'icon_red.png';
 const greenIcon = 'icon_green.png';
 const blueIcon = 'icon_blue.png';
 

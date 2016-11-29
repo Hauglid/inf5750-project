@@ -67,9 +67,6 @@ export default class Search extends React.Component {
                         inputId: unit[0].id,
                     }, self.onTouchTap);
                 });
-            ;
-
-
         });
 
     }
