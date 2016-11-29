@@ -1,4 +1,9 @@
-
+/**
+ * calculates the distance between to latLng objects
+ * @param p1: first object
+ * @param p2: second object
+ * @returns {number}: distance in meters
+ */
 export function getDistance(p1, p2) {
     var R = 6378137; // Earth’s mean radius in meter
     var dLat = rad(p2.lat - p1.lat);
@@ -11,13 +16,20 @@ export function getDistance(p1, p2) {
     return d; // returns the distance in meter
 }
 
+/**
+ * converts to radians
+ * @param x: number to be converted
+ * @returns {number}: the converted result
+ */
 function rad (x) {
     return x * Math.PI / 180;
 }
 
-export function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+/**
+ * calculates center of a polygon
+ * @param polygon: polygon to find the center of
+ * @returns {{lat: number, lng: number}}: center as a latLng object
+ */
 export function findCenter(polygon){
     var x1 = 1000.0;
     var x2 = 0.0;
@@ -44,15 +56,4 @@ export function findCenter(polygon){
         lng: y1+((y2-y1)/2),
     }
     return center;
-}
-export function removeEveryThingBut(array, keep){
-    var ret = array;
-
-    for(var i = ret.length-1; i>= 0; i--){
-
-        if(ret[i].id != keep){
-            ret.splice(i,1);
-        }
-    }
-    return ret;
 }
