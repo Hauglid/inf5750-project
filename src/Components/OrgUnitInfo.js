@@ -8,7 +8,10 @@ export default class OrgUnitInfo extends React.Component {
         super(props);
 
         this.state = {
-            unitInfo: [],
+            unitInfo: {
+                displayName: "",
+                openingDate: ""
+            },
             editing: false,
         };
 
@@ -257,7 +260,7 @@ export default class OrgUnitInfo extends React.Component {
 
         return (
             <div>
-                <TextField fullWidth={true} style={{fontSize: '20px', fontWeight: 'bold'}} value="Unit Information"/>
+                <TextField name="headline" fullWidth={true} style={{fontSize: '20px', fontWeight: 'bold'}} value="Unit Information"/>
                 <RaisedButton
                     label={this.state.editing ? "Cancel" : "Edit"}
                     onClick={this.state.editing ? this.cancelButton : this.editButton}
