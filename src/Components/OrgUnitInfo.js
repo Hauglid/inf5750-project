@@ -102,7 +102,7 @@ export default class OrgUnitInfo extends React.Component {
      * Makes it possible to edit the text fields
      */
     editButton() {
-        console.log("Edit");
+        //console.log("Edit");
         this.props.makeNew(true);
         this.setState({
             editing: true,
