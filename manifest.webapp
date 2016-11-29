@@ -4,7 +4,7 @@
   "description": "DHIS2 Map Facility App",
   "launch_path": "www/index.html",
   "icons": {
-    "48": "icon.png"
+    "48": "www/icon.png"
   },
   "developer": {
     "name": "Krister Bakken / Karl Thomas Hauglid / Jostein Hellerud"
@@ -14,7 +14,7 @@
     "dhis": {
       "href": "*",
       "auth": "admin:district",
-      "devHref": "http://localhost:8080"
+      "devHref": "http://localhost:8081"
     }
   }
 }
