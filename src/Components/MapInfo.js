@@ -52,7 +52,7 @@ export default class MapInfo extends React.Component {
                     id: a.id
                 }
             });
-            if(result.length > 0){
+            if (result.length > 0) {
                 this.setState({
                     unitInfo: result,
                 });
@@ -65,10 +65,10 @@ export default class MapInfo extends React.Component {
     render() {
 
         return (
-            <div style={{height:500}}>
+            <div style={{height: 500}}>
                 <h2 style={{height: "8%"}}>{this.state.name}</h2>
                 <Divider/>
-                <List style={{height: "85%" , overflowY: "scroll"}}>
+                <List style={{height: "85%", overflowY: "scroll"}}>
                     {this.state.unitInfo.map(function (item) {
                         return (
                             <ListItem

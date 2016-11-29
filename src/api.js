@@ -37,10 +37,10 @@ export function loadOrganisationUnits(level) {
         .then(onlySuccessResponses)
         .then(response => response.json())
         // pick the organisationUnits property from the payload
-        .then(({ organisationUnits }) => organisationUnits);
+        .then(({organisationUnits}) => organisationUnits);
 }
 
-export function loadAllUnits(){
+export function loadAllUnits() {
     console.log("api.loadAllUnits");
     return fetch(`${serverUrl}/organisationUnits`, fetchOptions)
         .then(onlySuccessResponses)
@@ -69,7 +69,7 @@ export function loadUnitInfoLvl(level) {
         .then(response => response.json());
 }
 //example of fields: fields=id,name,level
-export function loadUnitInfoLvlAndfields(level, fields){
+export function loadUnitInfoLvlAndfields(level, fields) {
     return fetch(`${serverUrl}/organisationUnits?level=${level}&paging=false&fields=${fields}`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json());
@@ -77,7 +77,10 @@ export function loadUnitInfoLvlAndfields(level, fields){
 
 export function saveOrganisationUnit(organisationUnit) {
     // POST the payload to the server to save the organisationUnit
-    return fetch(`${serverUrl}/organisationUnits`, Object.assign({}, fetchOptions, { method: 'POST', body: JSON.stringify(organisationUnit) }))
+    return fetch(`${serverUrl}/organisationUnits`, Object.assign({}, fetchOptions, {
+        method: 'POST',
+        body: JSON.stringify(organisationUnit)
+    }))
         .then(onlySuccessResponses)
         // Parse the json response
         .then(response => response.json())
@@ -87,7 +90,10 @@ export function saveOrganisationUnit(organisationUnit) {
 
 export function updateOrganisationUnit(organisationUnit) {
     // POST the payload to the server to save the organisationUnit
-    return fetch(`${serverUrl}/organisationUnits/${organisationUnit.id}`, Object.assign({}, fetchOptions, { method: 'PUT', body: JSON.stringify(organisationUnit) }))
+    return fetch(`${serverUrl}/organisationUnits/${organisationUnit.id}`, Object.assign({}, fetchOptions, {
+        method: 'PUT',
+        body: JSON.stringify(organisationUnit)
+    }))
         .then(onlySuccessResponses)
         // Parse the json response
         .then(response => response.json())
