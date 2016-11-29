@@ -25,9 +25,34 @@ export default class OrgUnitInfo extends React.Component {
         this.loadUnitInfo(this.props.id);
     }
 
+    /**
+     * Loads information if unit id is updated
+     * Loads coordinates if map is clicked
+     * @param nextProps
+     */
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.id != this.state.id) {
+            this.setState({
+                id: nextProps.id,
+            }, function () {
+                this.loadUnitInfo(this.state.id);
+            });
+        }
+
+        if (nextProps.makeNewCoords != this.state.unitInfo["coordinates"]) {
+            this.setState({
+                newCoordinates: nextProps.makeNewCoords
+            })
+        }
+    }
+
     // loads the information about an organisation unit
+    /**
+     * Fetches the information about the unit from the api
+     * @param id of unit to fetch
+     */
     loadUnitInfo(id) {
-        console.log("Loading unit info...");
+        //console.log("Loading unit info...");
         loadUnitInfo(id).then((organisationUnit) => {
             this.setState({
                 unitInfo: organisationUnit,
@@ -36,7 +61,11 @@ export default class OrgUnitInfo extends React.Component {
         });
     }
 
-
+    /**
+     * Changes the value of a text field
+     * @param category of value to be changed
+     * @param event keystrokes
+     */
     handleChange(category, event) {
         if (this.state.editing) {
             var info = this.state.unitInfo;
@@ -47,34 +76,40 @@ export default class OrgUnitInfo extends React.Component {
         }
     };
 
+    /**
+     * Creates a blank UnitInfo, ready to receive information
+     */
     newUnit() {
-        console.log("New");
+        //console.log("New");
         this.props.makeNew(true);
 
         this.setState({
-            editing: true,
-            new: true,
+                editing: true,
+                new: true,
                 unitInfo: {
                     displayName: "",
                     openingDate: "",
                 }
             }
-            // , function() {console.log(this.state.unitInfo);}
         );
     }
+
+    /**
+     * Makes it possible to edit the text fields
+     */
     editButton() {
         console.log("Edit");
         this.props.makeNew(true);
         this.setState({
             editing: true,
-        }
-        //, function() {console.log(this.state.oldUnitInfo);}
-        );
-
+        });
     }
 
+    /**
+     * Resets/loads the unit information
+     */
     cancelButton() {
-        console.log("Cancel");
+        //console.log("Cancel");
         this.props.makeNew(false);
         this.loadUnitInfo(this.props.id);
 
@@ -82,14 +117,16 @@ export default class OrgUnitInfo extends React.Component {
             editing: false,
             new: false,
             newCoordinates: ""
-        }
-        //, function() {console.log(this.state.unitInfo)}
-        );
+        });
 
     }
 
+    /**
+     * Saves a new unit if it is new, updates the current one if it's not new.
+     * Checks of there are any new coordinates.
+     */
     saveButton() {
-        console.log("Save");
+        //console.log("Save");
         this.props.makeNew(false);
         this.setState({
             editing: false,
@@ -97,22 +134,27 @@ export default class OrgUnitInfo extends React.Component {
         });
 
         if (this.state.new) {
-            var a = {
-                parent:{
-                    "id":this.state.districtId
+            // creates an new object based on the current state and saves it to the DHIS server
+            var newUnit = {
+                parent: {
+                    "id": this.state.districtId
                 },
                 openingDate: this.state.unitInfo["openingDate"],
                 name: this.state.unitInfo["displayName"],
                 shortName: this.state.unitInfo["displayName"],
                 coordinates: this.state.newCoordinates
             };
-            this.saveUnit(a);
+            this.saveUnit(newUnit);
         } else {
             var coords = this.state.newCoordinates;
+
+            //checks if the map has been clicked/new coordinates has been set
             if (coords == undefined) {
                 coords = this.state.unitInfo["coordinates"];
             }
-                var a = {
+
+            // creates a new object based on the current state and sends it to the DHIS server to update its values
+            var updatedUnit = {
                 parent: {
                     "id": this.state.districtId
                 },
@@ -122,10 +164,14 @@ export default class OrgUnitInfo extends React.Component {
                 shortName: this.state.unitInfo["displayName"],
                 coordinates: coords
             };
-            this.updateUnit(a);
+            this.updateUnit(updatedUnit);
         }
     }
 
+    /**
+     * Passes the created object on to the api, and reloads the map
+     * @param unit to be saved
+     */
     saveUnit(unit) {
         saveOrganisationUnit(unit)
             .then(response => {
@@ -135,70 +181,56 @@ export default class OrgUnitInfo extends React.Component {
 
     }
 
+    /**
+     * Passes the created object on to the api, and reloads the map
+     * @param unit to be updated
+     */
     updateUnit(unit) {
-        console.log("updating unit");
-        console.log(unit);
+        //console.log("updating unit");
         updateOrganisationUnit(unit)
-            .then(response => {
+            .then(() => {
                 this.props.updateId(unit.id, true);
             })
             .catch((error) => console.log(error));
     }
 
-    //returns false if valid, true if not
-    isValid() {
+    /**
+     * Checks of the required fields has a value
+     * @returns {boolean} false if all fields have value, true if not
+     */
+    isInvalid() {
         return !(
-          this.state.unitInfo["displayName"] &&
-          this.state.unitInfo["openingDate"] &&
-          this.state.districtId
+            this.state.unitInfo["displayName"] &&
+            this.state.unitInfo["openingDate"] &&
+            this.state.districtId
         );
     }
 
-    componentWillReceiveProps(nextProps){
-        if(nextProps.id != this.state.id){
-            this.setState({
-                id: nextProps.id,
-            }, function (){
-                this.loadUnitInfo(this.state.id);
-            });
-        }
-
-        if(nextProps.makeNewCoords != this.state.unitInfo["coordinates"]) {
-            this.setState({
-                newCoordinates: nextProps.makeNewCoords
-            })
-        }
-    }
-
-    saveTester() {
-        console.log("saveTester");
-
-        console.log(this.state.unitInfo);
-        console.log(this.state.districtId);
-        console.log(this.isValid());
-        console.log(this.state);
-
-
-    }
-
+    /**
+     * Updates the district field if the level is 3 or 4.
+     */
     getDistrict() {
-        console.log("getDistrict");
+        //console.log("getDistrict");
         if (this.state.level == 3) {
             this.setState({
-                    districtId: this.state.id,
-                    districtName: this.state.unitInfo["displayName"]
+                districtId: this.state.id,
+                districtName: this.state.unitInfo["displayName"]
             });
         } else if (this.state.level == 4) {
             searchBy("id", this.state.unitInfo["parent"]["id"])
                 .then((unit) => {
                     this.setState({
-                            districtName: unit[0]["displayName"],
-                            districtId: unit[0]["id"]
+                        districtName: unit[0]["displayName"],
+                        districtId: unit[0]["id"]
                     });
                 });
         }
     }
 
+    /**
+     * Keeps track of if the cancel/edit-button should be disabled
+     * @returns {boolean}
+     */
     cancelEditButtonDisabled() {
         if (this.state.new) {
             return false;
@@ -208,6 +240,10 @@ export default class OrgUnitInfo extends React.Component {
         }
     }
 
+    /**
+     * Keeps track of if the new/save-button should be disabled
+     * @returns {boolean}
+     */
     newSaveButtonDisabled() {
         if (this.state.editing == true) {
             return false;
@@ -231,7 +267,7 @@ export default class OrgUnitInfo extends React.Component {
                     label={this.state.editing ? "Save" : "New"}
                     primary={true}
                     onClick={this.state.editing ? this.saveButton : this.newUnit}
-                    disabled={this.newSaveButtonDisabled() ? true : this.isValid() }/>
+                    disabled={this.newSaveButtonDisabled() ? true : this.isInvalid() }/>
                 <br/>
                 <div>
                     <TextField
@@ -239,25 +275,20 @@ export default class OrgUnitInfo extends React.Component {
                         underlineShow={this.state.editing}
                         floatingLabelText="Name"
                         onChange={this.handleChange.bind(this, "displayName")}
-                        value={this.state.unitInfo["displayName"]} />
+                        value={this.state.unitInfo["displayName"]}/>
                     <br/>
                     <TextField
                         floatingLabelFixed={true}
                         onChange={this.handleChange.bind(this, "openingDate")}
                         underlineShow={this.state.editing}
                         floatingLabelText="Opening date"
-                        value={this.state.unitInfo["openingDate"]} />
+                        value={this.state.unitInfo["openingDate"]}/>
                     <br/>
                     <TextField
                         floatingLabelFixed={true}
                         floatingLabelText="District"
                         value={this.state.level > 2 ? this.state.districtName : ""}/>
                     <br/>
-                    <RaisedButton
-                        label={"tester"}
-                        onClick={this.saveTester.bind(this)}
-                        primary={!this.state.editing}/>
-
                 </div>
             </div>
         )
