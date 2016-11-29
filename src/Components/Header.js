@@ -1,5 +1,8 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
+import SvgIcon from 'material-ui/SvgIcon';
+import IconButton from 'material-ui/IconButton';
+
 
 export default class Header extends React.Component {
     constructor() {
@@ -11,7 +14,12 @@ export default class Header extends React.Component {
         return (
             <div>
                 <AppBar
-                    title="React Web App with material-ui"
+                    iconElementLeft={
+                        <IconButton href="/" >
+                            <img  style={{width:65, height:17}} src="logo_banner.png"/>
+                        </IconButton>}
+
+                    title=""
                 />
 
             </div>
