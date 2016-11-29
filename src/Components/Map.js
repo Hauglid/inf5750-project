@@ -101,6 +101,11 @@ export default class Map extends React.Component {
 
             if(nextProps.reload == true){
                 this.updateMap(this.state.id);
+                this.props.updateId(this.state.id, false);
+            }else if(!nextProps.reload) {
+                this.setState({
+                    reload: nextProps.reload,
+                });
             }
         }
         if(nextProps.makeNew == true && nextProps.makeNew != this.state.makeNew){

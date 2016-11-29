@@ -108,15 +108,19 @@ export default class OrgUnitInfo extends React.Component {
             };
             this.saveUnit(a);
         } else {
-            var a = {
-                parent:{
-                    "id":this.state.districtId
+            var coords = this.state.newCoordinates;
+            if (coords == undefined) {
+                coords = this.state.unitInfo["coordinates"];
+            }
+                var a = {
+                parent: {
+                    "id": this.state.districtId
                 },
                 id: this.state.unitInfo["id"],
                 openingDate: this.state.unitInfo["openingDate"],
                 name: this.state.unitInfo["displayName"],
                 shortName: this.state.unitInfo["displayName"],
-                coordinates: this.state.newCoordinates
+                coordinates: coords
             };
             this.updateUnit(a);
         }
@@ -132,6 +136,8 @@ export default class OrgUnitInfo extends React.Component {
     }
 
     updateUnit(unit) {
+        console.log("updating unit");
+        console.log(unit);
         updateOrganisationUnit(unit)
             .then(response => {
                 this.props.updateId(unit.id, true);
