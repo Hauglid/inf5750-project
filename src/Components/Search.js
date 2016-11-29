@@ -60,7 +60,6 @@ export default class Search extends React.Component {
 
     onTouchTap() {
         this.props.updateId(this.state.inputId);
-        console.log(this.state.inputId);
     }
 
     /**
