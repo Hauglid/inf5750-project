@@ -13,11 +13,17 @@ export default class Body extends React.Component {
         this.state = {
             id: "ImspTQPwCqd",
             makeNew: false,
-            makeNewCoords: undefined,
+            makeNewCoords: false,
             reload: false,
         };
     }
 
+    /**
+     * Callback function from children that updates the id,
+     * and handles reload for map.
+     * @param id - the new ID from children
+     * @param reload - handles reload request
+     */
     updateId(id, reload) {
         if (reload != undefined) {
             this.setState({
@@ -33,6 +39,11 @@ export default class Body extends React.Component {
 
     }
 
+    /**
+     * Puts the new coords in the correct format
+     * @param lat
+     * @param lng
+     */
     setNewCoords(lat, lng) {
         var string = "[" + lng + "," + lat + "]";
         this.setState({
@@ -40,6 +51,10 @@ export default class Body extends React.Component {
         });
     }
 
+    /**
+     * Handles click on map to give new coords.
+     * @param bool false or true
+     */
     setMakeNew(bool) {
         this.setState({
             makeNew: bool,
