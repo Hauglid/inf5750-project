@@ -4,6 +4,7 @@ Install NodeJS
 https://nodejs.org/en/download/current/
 
 For this to work properly you'll need a local version of DHIS2 or point the navigate to the demo or dev servers (https://play.dhis2.org/demo or https://play.dhis2.org/dev)
+We have tested with dev server, and it works. We can not guarantee that other servers have the same functionality.
 If you want to run it against either of these you will need to set up the server to accept CORS requests from http://localhost:8081
 You can do this by adding `http://localhost:8081` to the CORS Whitelist in the System Settings App.
 
