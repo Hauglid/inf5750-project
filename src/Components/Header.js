@@ -1,14 +1,9 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
-import SvgIcon from 'material-ui/SvgIcon';
 import IconButton from 'material-ui/IconButton';
 
 
 export default class Header extends React.Component {
-    constructor() {
-        super();
-        this.state = {};
-    }
 
     render() {
         return (
