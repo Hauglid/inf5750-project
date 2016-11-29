@@ -12,6 +12,7 @@ export default class OrgUnitInfo extends React.Component {
                 displayName: "",
                 openingDate: ""
             },
+            districtName: "",
             editing: false,
         };
 
