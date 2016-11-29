@@ -15,10 +15,10 @@ You can do this by adding `http://localhost:8081` to the CORS Whitelist in the S
 
 Manual
 ------
-Click on a polygon to select it and zoom. 
-Click on a marker to show info and enable editing. 
-Click on "new" to create a new organisation unit. Click on map to select location. This functionality only works for level 3.
-Right click to zoom out to parent. 
+* Click on a polygon to select it and zoom. 
+* Click on a marker to show info and enable editing. 
+* Click on "new" to create a new organisation unit. Click on map to select location. This functionality only works for level 3.
+* Right click to zoom out to parent. 
 
 Dependencies:
 -------------
