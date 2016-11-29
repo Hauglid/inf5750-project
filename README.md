@@ -31,14 +31,14 @@ Setup:
 npm install
 ```
 
-Run
----
+Run:
+----
 ```
 npm start
 ```
 
-Compile
--------
+Compile:
+--------
 
 ```
 npm run compile
