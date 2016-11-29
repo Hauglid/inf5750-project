@@ -21,6 +21,10 @@ export default class MapInfo extends React.Component {
         this.load();
     }
 
+    /**
+     * Check the current id with the new id, updates only if changes has been made.
+     * @param nextProps contains the next id
+     */
     componentWillReceiveProps(nextProps) {
         if (nextProps.id != this.state.id) {
             this.setState({
@@ -31,10 +35,11 @@ export default class MapInfo extends React.Component {
         }
     }
 
+    /**
+     * Loads and set the name of current facility
+     * and the "children"
+     */
     load() {
-
-        const response = searchBy("parent.id", this.state.id);
-
         // set name
         loadUnitInfo(this.state.id)
             .then(({name}) => name)
@@ -45,6 +50,7 @@ export default class MapInfo extends React.Component {
             });
 
         // get list
+        const response = searchBy("parent.id", this.state.id);
         response.then((unit) => {
             var result = unit.map(function (a) {
                 return {

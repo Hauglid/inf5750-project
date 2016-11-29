@@ -20,6 +20,10 @@ export default class Search extends React.Component {
         }
     }
 
+    /**
+     * Call function from search box. Executed every time new update in search.
+     * @param inputValue the new value from search box
+     */
     onUpdateInput(inputValue) {
         const self = this;
 
@@ -30,6 +34,10 @@ export default class Search extends React.Component {
         });
     }
 
+    /**
+     * Updates the datasource depending on input value from search box.
+     * Does a call to the api and retrieves input to datasource
+     */
     performSearch() {
         const self = this;
 
@@ -55,6 +63,10 @@ export default class Search extends React.Component {
         console.log(this.state.inputId);
     }
 
+    /**
+     * Handles "enter"-click. Sends new id to updateId in body.
+     * @param inputValue
+     */
     onNewRequest(inputValue) {
         const self = this;
 

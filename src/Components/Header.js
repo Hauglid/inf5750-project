@@ -9,12 +9,11 @@ export default class Header extends React.Component {
         return (
             <div>
                 <AppBar
+                    title=""
                     iconElementLeft={
                         <IconButton href="/">
                             <img style={{width: 65, height: 17}} src="logo_banner.png"/>
                         </IconButton>}
-
-                    title=""
                 />
 
             </div>
