@@ -38,5 +38,8 @@ npm start
 ```
 
 Compile
----
+-------
+
+```
 npm run compile
+```
