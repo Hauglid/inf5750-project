@@ -11,7 +11,7 @@
  */
 //const serverUrl = 'http://localhost:8080/dhis/api';
 //const serverUrl = 'https://play.dhis2.org/test/api'; // we are getting some weird behaviour when using this, so we're sticking to dev
-const serverUrl = 'https://play.dhis2.org/dev/api';
+const serverUrl = 'https://play.dhis2.org/demo/api';
 const basicAuth = `Basic ${btoa('admin:district')}`;
 
 /**
@@ -48,7 +48,6 @@ export function loadOrganisationUnits(level) {
 
 //not used, but left here in case of future need
 export function loadAllUnits() {
-    console.log("api.loadAllUnits");
     return fetch(`${serverUrl}/organisationUnits`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
@@ -74,7 +73,7 @@ export function loadUnitInfo(unitId) {
  * @returns {Promise.<TResult>} response from server
  */
 export function searchBy(filter, value) {
-    return fetch(`${serverUrl}/organisationUnits/?paging=false&filter=${filter}:^ilike:${value}`, fetchOptions)
+    return fetch(`${serverUrl}/organisationUnits/?paging=false&filter=${filter}:%5Eilike:${value}`, fetchOptions)
         .then(onlySuccessResponses)
         .then(response => response.json())
         .then(({organisationUnits}) => organisationUnits);
